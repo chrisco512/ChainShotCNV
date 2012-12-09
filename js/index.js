@@ -11,20 +11,32 @@ var canvas;
 var stage;
 var screen_width;
 var screen_height;
-var bmp;
+var bmps;
 
-var image1 = new Image();
+var images;
+var board = [["R", "R", "G"], ["R", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "O", "B"], ["Y", "O", "B"]];
+var loadCnt = 0;
+
 
 function init() {
     canvas = document.getElementById("gameCanvas");
 
-    image1.onload = handleImageLoad;
-    image1.onerror = handleImageError;
-    image1.src = "img/dot_A.png";
+    images = new Array(board.length);
+    for (var i = 0; i < board.length; i++) {
+        images[i] = new Array(board[i].length);
+        for (var j = 0; j < board[i].length; j++) {
+            images[i][j] = new Image();
+            images[i][j].onload = handleImageLoad;
+            images[i][j].onerror = handleImageError;
+            images[i][j].src = "img/dot_" + board[i][j] + ".png";
+        }
+    }
 }
 
 function handleImageLoad(e) {
-    startGame();
+    loadCnt++;
+    if(loadCnt === 9)
+        startGame();
 }
 
 function handleImageError(e) {
@@ -37,35 +49,64 @@ function startGame() {
     screen_width = canvas.width;
     screen_height = canvas.height;
 
-    bmp = new createjs.Bitmap(image1);
-    bmp.regX = 25;
-    bmp.regY = 25;
-    bmp.x = 300;
-    bmp.y = 150;
-    bmp.vX = 1;
-    
-    stage.addChild(bmp);
-    stage.update();
+    bmps = new Array(board.length);
 
+    for (var i = 0; i < board.length; i++) {
+        bmps[i] = new Array(board[i].length);
+        for (var j = 0; j < board[i].length; j++) {
+            var bmp = new createjs.Bitmap(images[i][j]);
+
+            bmp.regX = bmp.image.width / 2;
+            bmp.regY = bmp.image.height / 2;
+       
+            bmp.scaleX = (screen_width / board.length) / bmp.image.width;
+            bmp.scaleY = (screen_height / board.length) / bmp.image.height;
+
+            bmp.x = (bmp.image.width/2 + i * bmp.image.width) * bmp.scaleX;
+            bmp.y = screen_height - bmp.scaleY * (bmp.image.height/2 + j * bmp.image.height);
+
+            bmps[i][j] = bmp;
+            stage.addChild(bmps[i][j]);
+        }
+    }
+
+    //bmp = new createjs.Bitmap(
+    //    );
+    //bmp.regX = 25;
+    //bmp.regY = 25;
+    //bmp.x = 300;
+    //bmp.y = 150;
+    //bmp.vX = -25;
+    //bmp.vY = 25;
+    //bmp.properX = 20;
+    //bmp.properY = 540;
+    //bmp.shadow = new createjs.Shadow("#454", 0, 5, 4);
+
+    
+    stage.update();
+    //
     createjs.Ticker.addListener(window);
     createjs.Ticker.useRAF = true;
     createjs.Ticker.setFPS(60);
 }
 
 function checkCollision() {
-    if (bmp.x > screen_width)
-        bmp.vX = -1;
-    else if (bmp.x < 0)
-        bmp.vX = 1;
+    if (bmp.x < (bmp.properX + bmp.image.width/2)) {
+        bmp.x = bmp.properX + bmp.image.width / 2;
+    }
+
+    if (bmp.y > (bmp.properY - bmp.image.height / 2)) {
+        bmp.y = bmp.properY - bmp.image.height / 2;
+    }
 }
 
 function tick() {
-    checkCollision();
-    bmp.x += bmp.vX;
+    //bmp.x += bmp.vX;
+    //bmp.y += bmp.vY;
+    //checkCollision();
     stage.update();
 }
 
 window.onload = function () {
     init();
-    console.log("yay");
 };
