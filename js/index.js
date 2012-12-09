@@ -17,7 +17,7 @@ var target;
 var clickEnabled = true;
 
 var images;
-var board = [["R", "R", "G"], ["R", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "O", "B"], ["R", "G", "B"], ["R", "G", "B"], ["Y", "O", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
+var board = [["R", "R", "G"], ["R", "G", "B"], ["Y", "Y", "B", "O"], ["R", "R", "G"], ["R", "G", "B"], ["Y", "Y", "B", "O"], ["R", "R", "G"], ["R", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "O", "B"], ["R", "G", "B"], ["R", "G", "B"], ["Y", "O", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
 
 
 function init() {
@@ -95,10 +95,8 @@ function startGame() {
     //
     //stage.addChild(bmps);
 
-    bmps = new Array(board.length);
     
     for (var i = 0; i < board.length; i++) {
-        bmps[i] = new Array(board[i].length);
         for (var j = 0; j < board[i].length; j++) {
             var bmp = new createjs.BitmapAnimation(spriteSheet);
             bmp.gotoAndPlay(board[i][j]);
@@ -106,18 +104,20 @@ function startGame() {
             bmp.currentFrame = 0;
             
             bmp.onClick = handleClick;
-            
-            //bmp.regX = bmp.spriteSheet._frameWidth / 2;
-            //bmp.regY = bmp.spriteSheet._frameHeight / 2;
        
             bmp.scaleX = (screen_width / board.length) / bmp.spriteSheet._frameWidth;
             bmp.scaleY = (screen_height / board.length) / bmp.spriteSheet._frameHeight;
     
             bmp.x = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
             bmp.y = screen_height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
+
+            bmp.properX = bmp.x;
+            bmp.properY = bmp.y;
+
+            bmp.i = i;
+            bmp.j = j;
     
-            bmps[i][j] = bmp;
-            stage.addChild(bmps[i][j]);
+            stage.addChild(bmp);
         }
     }
 
@@ -141,14 +141,13 @@ function startGame() {
     createjs.Ticker.setFPS(60);
 }
 
-function checkCollision() {
-
-    if (bmps.x < (bmps.properX + bmps.spriteSheet._frameHeight / 2)) {
-        bmps.x = bmps.properX + bmps.spriteSheet._frameHeight / 2;
+function checkCollision(bmp) {
+    if (bmp.x < bmp.properX) {
+        bmp.x = bmp.properX; // + bmp.scaleX * bmp.spriteSheet._frameHeight / 2;
     }
 
-    if (bmps.y > (bmps.properY - bmps.spriteSheet._frameHeight / 2)) {
-        bmps.y = bmps.properY - bmps.spriteSheet._frameHeight / 2;
+    if (bmp.y > bmp.properY ) {
+        bmp.y = bmp.properY; 
     }
 }
 
@@ -156,10 +155,33 @@ function fadeOut() {
     if (target.alpha > 0)
         target.alpha -= 0.03;
     else {
-        target.gotoAndStop(target.currentAnimation.substring(0,1));
-        target.alpha = 1;
+        //target.gotoAndStop(target.currentAnimation.substring(0,1));
+        //target.alpha = 1;
+        stage.removeChild(target);
+        board[target.i].splice(target.j, 1);
+        if (board[target.i].length === 0)
+            board.splice(target.i, 1);
+        updatePositions();
         createjs.Ticker.removeListener(fadeOut);
         clickEnabled = true;
+    }
+}
+
+function updatePositions() {
+    var counter = 0;
+
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[i].length; j++) {
+            var bmp = stage.getChildAt(counter);
+
+            bmp.properX = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
+            bmp.properY = screen_height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
+
+            bmp.i = i;
+            bmp.j = j;
+
+            counter++;
+        }
     }
 }
 
@@ -173,9 +195,11 @@ function handleClick(e) {
 }
 
 function tick() {
-    //bmps.x += bmps.vX;
-    //bmps.y += bmps.vY;
-    //checkCollision();
+    for (child in stage.children) {
+        stage.children[child].x -= 5;
+        stage.children[child].y += 5;
+        checkCollision(stage.children[child]);
+    }
     stage.update();
 }
 
