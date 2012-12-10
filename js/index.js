@@ -1,4 +1,29 @@
 ﻿
+Array.prototype.containsArray = function (val) {
+    
+    var hash = {};
+    for (var i = 0; i < this.length; i++) {
+        hash[this[i]] = i;
+    }
+    return hash.hasOwnProperty(val);
+}
+
+//sorts removes so that board clears out correctly
+function sortRemoveList(a, b) {
+    if (a[1] < b[1])
+        return 1;
+    else if (a[1] === b[1]) {
+        if (a[0] < b[0])
+            return 1;
+        if (a[0] === b[0])
+            return 0;
+        else
+            return -1;
+    }
+    else
+        return -1;
+}
+
 //start screen
 //levels menu
 //top scores for each level
@@ -12,7 +37,6 @@ var stage;
 var screen_width;
 var screen_height;
 var bmps;
-var target;
 
 var clickEnabled = true;
 
@@ -43,6 +67,7 @@ function startGame() {
     screen_width = canvas.width;
     screen_height = canvas.height;
 
+    // set up animations
     var spriteSheet = new createjs.SpriteSheet({
         images: [images],
         frames: { width: 150, height: 150, regX: 75, regY: 75 },
@@ -81,21 +106,8 @@ function startGame() {
             Y_I:[30, 31, "Y_I", 4],
         }
     });
-
-    //bmps = new createjs.BitmapAnimation(spriteSheet);
-    //
-    //bmps.onClick = handleClick;
-    //
-    //bmps.gotoAndPlay("B");
-    //
-    //bmps.x = 300;
-    //bmps.y = 300;
-    //
-    //bmps.currentFrame = 0;
-    //
-    //stage.addChild(bmps);
-
     
+    //add bead animations to the stage
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
             var bmp = new createjs.BitmapAnimation(spriteSheet);
@@ -120,30 +132,17 @@ function startGame() {
             stage.addChild(bmp);
         }
     }
-
-    //bmp = new createjs.Bitmap(
-    //    );
-    //bmp.regX = 25;
-    //bmp.regY = 25;
-    //bmp.x = 300;
-    //bmp.y = 150;
-    //bmps.vX = -25;
-    //bmps.vY = 25;
-    //bmps.properX = 20;
-    //bmps.properY = 540;
-    //bmp.shadow = new createjs.Shadow("#454", 0, 5, 4);
-
     
     stage.update();
-    //
     createjs.Ticker.addListener(window);
     createjs.Ticker.useRAF = true;
     createjs.Ticker.setFPS(60);
 }
 
+// not really checking collision, but checking to see if the block is in the proper position or not
 function checkCollision(bmp) {
     if (bmp.x < bmp.properX) {
-        bmp.x = bmp.properX; // + bmp.scaleX * bmp.spriteSheet._frameHeight / 2;
+        bmp.x = bmp.properX;
     }
 
     if (bmp.y > bmp.properY ) {
@@ -151,22 +150,37 @@ function checkCollision(bmp) {
     }
 }
 
+var fadeBmps;
+
+// causes the block to fade awaay as it plays its removal animation
 function fadeOut() {
-    if (target.alpha > 0)
-        target.alpha -= 0.03;
-    else {
-        //target.gotoAndStop(target.currentAnimation.substring(0,1));
-        //target.alpha = 1;
-        stage.removeChild(target);
-        board[target.i].splice(target.j, 1);
-        if (board[target.i].length === 0)
-            board.splice(target.i, 1);
+    var invisibleCount = 0;
+
+    for (var i = 0; i < fadeBmps.length; i++) {
+        var bmp = fadeBmps[i];
+        if (bmp.alpha > 0)
+            bmp.alpha -= 0.03;
+        else {
+            invisibleCount++;
+        }
+    }
+
+    if (invisibleCount === fadeBmps.length) {
+        for (var i = 0; i < fadeBmps.length; i++) {
+            var bmp = fadeBmps[i];
+            stage.removeChild(bmp);
+            board[bmp.i].splice(bmp.j, 1);
+            if (board[bmp.i].length === 0)
+                board.splice(bmp.i, 1);
+        }
+
         updatePositions();
         createjs.Ticker.removeListener(fadeOut);
         clickEnabled = true;
-    }
+    }   
 }
 
+// sets the "proper" coordinates so the block knows what position to move towards after others have been removed
 function updatePositions() {
     var counter = 0;
 
@@ -185,15 +199,109 @@ function updatePositions() {
     }
 }
 
+// when a block gets clicked, disable the click function until the block has been removed
 function handleClick(e) {
     if (clickEnabled) {
         clickEnabled = false;
-        target = e.target;
-        target.gotoAndPlay(target.currentAnimation + "_I");
-        createjs.Ticker.addListener(fadeOut);
+        remove(e.target);
     }
 }
 
+// remove blocks
+function remove(target) {
+    var removeList = [];
+    var visitList = [];
+    var visitedList = [];
+    fadeBmps = [];
+
+    removeList.push([target.i, target.j]);
+    visitList.push([target.i, target.j]);
+
+    var curColor = board[target.i][target.j];
+
+    while (visitList.length > 0) {
+        var currentNode = visitList.pop();
+        var curCol = currentNode[0];
+        var curRow = currentNode[1];
+
+        var leftColor = curCol > 0 ? board[curCol - 1][curRow] : null;
+        var leftNode = [curCol - 1, curRow];
+
+        var topColor = curRow < board[curCol].length - 1 ? board[curCol][curRow + 1] : null;
+        var topNode = [curCol, curRow + 1];
+
+        var rightColor = curCol < board.length - 1 ? board[curCol + 1][curRow] : null;
+        var rightNode = [curCol + 1, curRow];
+
+        var bottomColor = curRow > 0 ? board[curCol][curRow - 1] : null;
+        var bottomNode = [curCol, curRow - 1];
+
+        //check left node
+        if (leftColor === curColor) {
+            if (!visitedList.containsArray(leftNode) && !visitList.containsArray(leftNode)) {
+                removeList.push(leftNode);
+                visitList.push(leftNode);
+            }
+        }
+        //check top node
+        if (topColor === curColor) {
+            if (!visitedList.containsArray(topNode) && !visitList.containsArray(topNode)) {
+                removeList.push(topNode);
+                visitList.push(topNode);
+            }
+        }
+        //check right node
+        if (rightColor === curColor) {
+            if (!visitedList.containsArray(rightNode) && !visitList.containsArray(rightNode)) {
+                removeList.push(rightNode);
+                visitList.push(rightNode);
+            }
+
+        }
+        //check bottom node
+        if (bottomColor === curColor) {
+            if (!visitedList.containsArray(bottomNode) && !visitList.containsArray(bottomNode)) {
+                removeList.push(bottomNode);
+                visitList.push(bottomNode);
+            }
+        }
+
+        visitedList.push(currentNode);
+    }
+
+    removeList.sort(sortRemoveList);
+
+    if (removeList.length > 1) {
+        // set up remove animations for each in the remove list
+        var stageIndex = stage.getNumChildren() - 1;
+
+        for (var i = board.length - 1; i >= 0; i--) {
+            for (var j = board[i].length - 1; j >= 0; j--) {
+                for (var k = 0; k < removeList.length; k++) {
+                    if (removeList[k][0] === i && removeList[k][1] === j) {
+                        var bmp = stage.getChildAt(stageIndex);
+                        bmp.gotoAndPlay(bmp.currentAnimation + "_I");
+                        fadeBmps.push(bmp);
+                    }
+                }
+                stageIndex--;
+            }
+        }
+
+        createjs.Ticker.addListener(fadeOut);
+    } else {
+        clickEnabled = true;
+    }
+
+    //animations in single array
+    //data is in a double array
+
+    //iterate through board array with a counter to translate to position, yes, easiest way
+    //
+
+}
+
+// pull blocks toward proper position
 function tick() {
     for (child in stage.children) {
         stage.children[child].x -= 5;
