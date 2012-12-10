@@ -32,6 +32,20 @@ function sortRemoveList(a, b) {
 //board logic
 //pull beads down and push to left
 
+var audio = new Audio();
+var audio2 = new Audio();
+var audio3 = new Audio();
+
+
+audio.src = "snd/button-1.mp3";
+audio2.src = "snd/button-4.mp3";
+audio.volume = 0.5;
+audio2.volume = 0.5;
+audio3.autoplay = true;
+audio3.loop = true;
+//audio3.src = "snd/midnight-ride.mp3";
+
+var score;
 var canvas;
 var stage;
 var screen_width;
@@ -41,11 +55,15 @@ var bmps;
 var clickEnabled = true;
 
 var images;
-var board = [["R", "R", "G"], ["R", "G", "B"], ["Y", "Y", "B", "O"], ["R", "R", "G"], ["R", "G", "B"], ["Y", "Y", "B", "O"], ["R", "R", "G"], ["R", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "O", "B"], ["R", "G", "B"], ["R", "G", "B"], ["Y", "O", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
+var board = [["Y", "Y", "B", "O", "Y", "B", "O", "G", "B", "G", "B"], ["Y", "O", "B", "Y", "B", "O", "Y", "B", "O"], ["R", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O", "G", "B", "G", "B", "G", "B"], ["Y", "O", "Y", "B", "O", "B", "Y", "B", "O", "Y", "O"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "O", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
 
 
 function init() {
     canvas = document.getElementById("gameCanvas");
+
+    canvas.height = window.innerHeight - 50;
+    canvas.width = canvas.height;
+  
 
     images = new Image();
     images.onload = handleImageLoad;
@@ -119,6 +137,7 @@ function startGame() {
        
             bmp.scaleX = (screen_width / board.length) / bmp.spriteSheet._frameWidth;
             bmp.scaleY = (screen_height / board.length) / bmp.spriteSheet._frameHeight;
+
     
             bmp.x = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
             bmp.y = screen_height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
@@ -272,6 +291,8 @@ function remove(target) {
     removeList.sort(sortRemoveList);
 
     if (removeList.length > 1) {
+        audio.play();
+
         // set up remove animations for each in the remove list
         var stageIndex = stage.getNumChildren() - 1;
 
@@ -290,6 +311,7 @@ function remove(target) {
 
         createjs.Ticker.addListener(fadeOut);
     } else {
+        audio2.play();
         clickEnabled = true;
     }
 
@@ -304,8 +326,8 @@ function remove(target) {
 // pull blocks toward proper position
 function tick() {
     for (child in stage.children) {
-        stage.children[child].x -= 5;
-        stage.children[child].y += 5;
+        stage.children[child].x -= 10;
+        stage.children[child].y += 15;
         checkCollision(stage.children[child]);
     }
     stage.update();

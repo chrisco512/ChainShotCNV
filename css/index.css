@@ -1,7 +1,15 @@
 ﻿body {
+    background-image: url("../img/preview3.jpg");
 }
 
 canvas {
-    background-color: yellowgreen;
+    background-image: url("../img/preview9.jpg");
 
+}
+
+#container {
+    text-align: center;
+    vertical-align: middle;
+    height: 100%;
+    width: 100%;
 }
