@@ -52,6 +52,8 @@ var screen_width;
 var screen_height;
 var bmps;
 
+var boxDOM;
+
 var clickEnabled = true;
 
 var images;
@@ -63,8 +65,7 @@ function init() {
 
     canvas.height = window.innerHeight - 50;
     canvas.width = canvas.height;
-  
-
+    
     images = new Image();
     images.onload = handleImageLoad;
     images.onerror = handleImageError;
@@ -147,15 +148,39 @@ function startGame() {
 
             bmp.i = i;
             bmp.j = j;
+
+            bmp.type = "block";
     
             stage.addChild(bmp);
         }
     }
+
     
     stage.update();
     createjs.Ticker.addListener(window);
     createjs.Ticker.useRAF = true;
     createjs.Ticker.setFPS(60);
+
+    var box = document.createElement("div");
+    box.className = "block";
+    box.textContent = "YOOOOOOO";
+
+    var container = document.getElementById("container");
+    container.removeChild(canvas);
+    container.appendChild(box);
+    container.appendChild(canvas);
+
+    boxDOM = new createjs.DOMElement(box);
+    boxDOM.regX = 50;
+    boxDOM.regY = 50;
+
+    boxDOM.x = canvas.width * 0.5;
+    boxDOM.y = -200;
+
+    stage.addChild(boxDOM);
+     
+    createjs.Tween.get(boxDOM).to({ alpha: 1, x: 50, y: canvas.height * 0.5, rotation: 720 }, 10000, createjs.Ease.cubicOut);
+    
 }
 
 // not really checking collision, but checking to see if the block is in the proper position or not
@@ -206,6 +231,10 @@ function updatePositions() {
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
             var bmp = stage.getChildAt(counter);
+            while (bmp.type != "block") {
+                counter++;
+                bmp = stage.getChildAt(counter);
+            }
 
             bmp.properX = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
             bmp.properY = screen_height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
@@ -301,6 +330,10 @@ function remove(target) {
                 for (var k = 0; k < removeList.length; k++) {
                     if (removeList[k][0] === i && removeList[k][1] === j) {
                         var bmp = stage.getChildAt(stageIndex);
+                        while (bmp.i != i || bmp.j != j || bmp.type != "block") {
+                            stageIndex--;
+                            bmp = stage.getChildAt(stageIndex);
+                        }
                         bmp.gotoAndPlay(bmp.currentAnimation + "_I");
                         fadeBmps.push(bmp);
                     }
@@ -314,21 +347,17 @@ function remove(target) {
         audio2.play();
         clickEnabled = true;
     }
-
-    //animations in single array
-    //data is in a double array
-
-    //iterate through board array with a counter to translate to position, yes, easiest way
-    //
-
 }
 
 // pull blocks toward proper position
 function tick() {
+    
     for (child in stage.children) {
-        stage.children[child].x -= 10;
-        stage.children[child].y += 15;
-        checkCollision(stage.children[child]);
+        if (stage.children[child].type === "block") {
+            stage.children[child].x -= 10;
+            stage.children[child].y += 15;
+            checkCollision(stage.children[child]);
+        }
     }
     stage.update();
 }

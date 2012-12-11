@@ -7,6 +7,14 @@ canvas {
 
 }
 
+.block {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    opacity: 0;
+}
+
+
 #container {
     text-align: center;
     vertical-align: middle;
