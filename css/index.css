@@ -4,15 +4,14 @@
 
 canvas {
     background-image: url("../img/preview9.jpg");
+    position:absolute;
 
 }
 
 .block {
     width: 100px;
-    height: 100px;
-    background-color: blue;
-    opacity: 0;
-}
+    background-color: ghostwhite;
+    opacity: .50;
 
 
 #container {

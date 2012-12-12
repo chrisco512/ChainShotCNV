@@ -1,4 +1,14 @@
-﻿
+﻿var score;
+var canvas;
+var stage;
+var screen_width;
+var screen_height;
+var bmps;
+var boxDOM, boxDOM2;
+var clickEnabled = true;
+var images;
+var board = [["Y", "Y", "B", "O", "Y", "B", "O", "G", "B", "G", "B"], ["Y", "O", "B", "Y", "B", "O", "Y", "B", "O"], ["R", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O", "G", "B", "G", "B", "G", "B"], ["Y", "O", "Y", "B", "O", "B", "Y", "B", "O", "Y", "O"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "O", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
+
 Array.prototype.containsArray = function (val) {
     
     var hash = {};
@@ -24,6 +34,81 @@ function sortRemoveList(a, b) {
         return -1;
 }
 
+function drawScreen() {
+    
+    canvas.height = window.innerHeight - 50;
+    canvas.width = canvas.height;
+    canvas.style.left = canvas.parentElement.clientWidth / 2 - canvas.width / 2 + 8 + 'px';
+
+    if (!boxDOM) {
+        var box = document.createElement("div");
+        box.className = "block";
+        box.textContent = "YOOOOOOO";
+        box.style.height = canvas.height + 'px';
+
+        var box2 = document.createElement("div");
+        box2.className = "block";
+        box2.textContent = "YOOOO";
+        box2.style.height = canvas.height + 'px';
+
+        var container = document.getElementById("container");
+        container.removeChild(canvas);
+        container.appendChild(box);
+        container.appendChild(box2);
+        container.appendChild(canvas);
+
+        boxDOM = new createjs.DOMElement(box);
+        boxDOM2 = new createjs.DOMElement(box2);
+
+        boxDOM.regX = boxDOM.width / 2;
+        boxDOM.regY = boxDOM.height / 2;
+
+        boxDOM2.regX = boxDOM2.width / 2;;
+        boxDOM2.regY = boxDOM2.height / 2;;
+
+        boxDOM.x = canvas.width * 0.5;
+        boxDOM.y = -200;
+
+        boxDOM2.x = canvas.width * 0.5;
+        boxDOM2.y = -200;
+
+        //boxDOM.index = stage.getNumChildren();
+
+        stage.addChild(boxDOM);
+        stage.addChild(boxDOM2);
+
+    }
+
+    for (var it = 0; it < stage.getNumChildren(); it++) {
+        var bmp = stage.getChildAt(it);
+
+        if (bmp && bmp.type === "block") {
+            var i = bmp.i;
+            var j = bmp.j;
+
+            bmp.scaleX = (canvas.width / board.length) / bmp.spriteSheet._frameWidth;
+            bmp.scaleY = (canvas.height / board.length) / bmp.spriteSheet._frameHeight;
+            
+            bmp.x = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
+            bmp.y = canvas.height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
+
+            bmp.properX = bmp.x;
+            bmp.properY = bmp.y;
+        }
+    }
+
+    stage.update();
+
+    boxDOM.htmlElement.style.height = canvas.height + 'px';
+    boxDOM2.htmlElement.style.height = canvas.height + 'px';
+
+    createjs.Tween.get(boxDOM).to({ alpha: .7, x: boxDOM.htmlElement.parentElement.clientWidth / 2 - canvas.width / 2 - boxDOM.htmlElement.clientWidth, y: 0, rotation: 360 }, 20, createjs.Ease.cubicOut);
+    createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth / 2 + canvas.width / 2, y: 0, rotation: 360 }, 20, createjs.Ease.cubicOut);
+}
+
+window.onresize = function (event) {
+    drawScreen();
+}
 //start screen
 //levels menu
 //top scores for each level
@@ -45,26 +130,15 @@ audio3.autoplay = true;
 audio3.loop = true;
 //audio3.src = "snd/midnight-ride.mp3";
 
-var score;
-var canvas;
-var stage;
-var screen_width;
-var screen_height;
-var bmps;
-
-var boxDOM;
-
-var clickEnabled = true;
-
-var images;
-var board = [["Y", "Y", "B", "O", "Y", "B", "O", "G", "B", "G", "B"], ["Y", "O", "B", "Y", "B", "O", "Y", "B", "O"], ["R", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O", "G", "B", "G", "B", "G", "B"], ["Y", "O", "Y", "B", "O", "B", "Y", "B", "O", "Y", "O"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "O", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
 
 
 function init() {
+
     canvas = document.getElementById("gameCanvas");
 
-    canvas.height = window.innerHeight - 50;
-    canvas.width = canvas.height;
+    stage = new createjs.Stage(canvas);
+
+    //drawScreen();
     
     images = new Image();
     images.onload = handleImageLoad;
@@ -81,7 +155,7 @@ function handleImageError(e) {
 }
 
 function startGame() {
-    stage = new createjs.Stage(canvas);
+    drawScreen();
 
     screen_width = canvas.width;
     screen_height = canvas.height;
@@ -161,25 +235,7 @@ function startGame() {
     createjs.Ticker.useRAF = true;
     createjs.Ticker.setFPS(60);
 
-    var box = document.createElement("div");
-    box.className = "block";
-    box.textContent = "YOOOOOOO";
-
-    var container = document.getElementById("container");
-    container.removeChild(canvas);
-    container.appendChild(box);
-    container.appendChild(canvas);
-
-    boxDOM = new createjs.DOMElement(box);
-    boxDOM.regX = 50;
-    boxDOM.regY = 50;
-
-    boxDOM.x = canvas.width * 0.5;
-    boxDOM.y = -200;
-
-    stage.addChild(boxDOM);
-     
-    createjs.Tween.get(boxDOM).to({ alpha: 1, x: 50, y: canvas.height * 0.5, rotation: 720 }, 10000, createjs.Ease.cubicOut);
+   
     
 }
 
@@ -237,7 +293,7 @@ function updatePositions() {
             }
 
             bmp.properX = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
-            bmp.properY = screen_height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
+            bmp.properY = canvas.height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
 
             bmp.i = i;
             bmp.j = j;
