@@ -7,6 +7,11 @@ var bmps;
 var boxDOM, boxDOM2;
 var clickEnabled = true;
 var images;
+var numBlks = 0;
+var mode = "EASY";
+var level = 1;
+var size = 0;
+var score = 0;
 var board = [["Y", "Y", "B", "O", "Y", "B", "O", "G", "B", "G", "B"], ["Y", "O", "B", "Y", "B", "O", "Y", "B", "O"], ["R", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O", "G", "B", "G", "B", "G", "B"], ["Y", "O", "Y", "B", "O", "B", "Y", "B", "O", "Y", "O"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "O", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
 
 Array.prototype.containsArray = function (val) {
@@ -41,14 +46,10 @@ function drawScreen() {
     canvas.style.left = canvas.parentElement.clientWidth / 2 - canvas.width / 2 + 8 + 'px';
 
     if (!boxDOM) {
-        var box = document.createElement("div");
-        box.className = "block";
-        box.textContent = "YOOOOOOO";
+        var box = document.getElementById("box");
         box.style.height = canvas.height + 'px';
 
-        var box2 = document.createElement("div");
-        box2.className = "block";
-        box2.textContent = "YOOOO";
+        var box2 = document.getElementById("box2");
         box2.style.height = canvas.height + 'px';
 
         var container = document.getElementById("container");
@@ -89,21 +90,39 @@ function drawScreen() {
             bmp.scaleX = (canvas.width / board.length) / bmp.spriteSheet._frameWidth;
             bmp.scaleY = (canvas.height / board.length) / bmp.spriteSheet._frameHeight;
             
-            bmp.x = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
-            bmp.y = canvas.height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
+            bmp.properX = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
+            bmp.properY = canvas.height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
 
-            bmp.properX = bmp.x;
-            bmp.properY = bmp.y;
+            //bmp.properX = bmp.x;
+            //bmp.properY = bmp.y;
         }
     }
 
-    stage.update();
 
     boxDOM.htmlElement.style.height = canvas.height + 'px';
     boxDOM2.htmlElement.style.height = canvas.height + 'px';
 
     createjs.Tween.get(boxDOM).to({ alpha: .7, x: boxDOM.htmlElement.parentElement.clientWidth / 2 - canvas.width / 2 - boxDOM.htmlElement.clientWidth, y: 0, rotation: 360 }, 20, createjs.Ease.cubicOut);
     createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth / 2 + canvas.width / 2, y: 0, rotation: 360 }, 20, createjs.Ease.cubicOut);
+
+
+}
+
+function updateMenus() {
+    var $score = document.getElementById("score");
+    $score.innerText = score;
+
+    var $numBlks = document.getElementById("numBlks");
+    $numBlks.innerText = numBlks;
+
+    var $level = document.getElementById("level");
+    $level.innerText = level;
+
+    var $size = document.getElementById("size");
+    $size.innerText = size + " x " + size;
+
+    var $mode = document.getElementById("mode");
+    $mode.innerText = mode;
 }
 
 window.onresize = function (event) {
@@ -121,15 +140,33 @@ var audio = new Audio();
 var audio2 = new Audio();
 var audio3 = new Audio();
 
+var audioSources = ["snd/destination.mp3", "snd/iron-man.mp3", "snd/midnight-ride.mp3", "snd/heart-of-the-sea.mp3"];
+var audioIndex = Math.floor((Math.random() * audioSources.length));;
 
 audio.src = "snd/button-1.mp3";
 audio2.src = "snd/button-4.mp3";
 audio.volume = 0.5;
 audio2.volume = 0.5;
 audio3.autoplay = true;
-audio3.loop = true;
-//audio3.src = "snd/midnight-ride.mp3";
+audio3.src = audioSources[audioIndex];
 
+function nextSong() {
+    audioIndex++;
+    if (audioIndex > audioSources.length - 1)
+        audioIndex = 0;
+    audio3.src = audioSources[audioIndex];
+}
+
+audio3.addEventListener('ended', function () {
+    nextSong();
+});
+
+function playPause() {
+    if (audio3.paused)
+        audio3.play();
+    else
+        audio3.pause();
+}
 
 
 function init() {
@@ -199,7 +236,11 @@ function startGame() {
             Y_I:[30, 31, "Y_I", 4],
         }
     });
-    
+
+    //populate num remaining value
+    numBlks = board.length * board.length;
+    size = board.length;
+
     //add bead animations to the stage
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
@@ -212,13 +253,14 @@ function startGame() {
        
             bmp.scaleX = (screen_width / board.length) / bmp.spriteSheet._frameWidth;
             bmp.scaleY = (screen_height / board.length) / bmp.spriteSheet._frameHeight;
-
     
-            bmp.x = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
-            bmp.y = screen_height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
+            bmp.properX = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
+            bmp.properY = screen_height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
 
-            bmp.properX = bmp.x;
-            bmp.properY = bmp.y;
+            bmp.x = bmp.properX;
+            bmp.y = bmp.properY - screen_height - 100;
+            //bmp.properX = bmp.x;
+            //bmp.properY = bmp.y;
 
             bmp.i = i;
             bmp.j = j;
@@ -235,7 +277,7 @@ function startGame() {
     createjs.Ticker.useRAF = true;
     createjs.Ticker.setFPS(60);
 
-   
+    drawScreen();
     
 }
 
@@ -377,6 +419,8 @@ function remove(target) {
 
     if (removeList.length > 1) {
         audio.play();
+        score += (removeList.length - 1) * (removeList.length - 1);
+        numBlks -= removeList.length;
 
         // set up remove animations for each in the remove list
         var stageIndex = stage.getNumChildren() - 1;
@@ -407,11 +451,11 @@ function remove(target) {
 
 // pull blocks toward proper position
 function tick() {
-    
+    updateMenus();
     for (child in stage.children) {
         if (stage.children[child].type === "block") {
-            stage.children[child].x -= 10;
-            stage.children[child].y += 15;
+            stage.children[child].x -= 8;
+            stage.children[child].y += 8;
             checkCollision(stage.children[child]);
         }
     }
