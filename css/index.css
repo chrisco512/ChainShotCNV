@@ -15,10 +15,23 @@ canvas {
     text-align: center;
 }
 
+body {
+    overflow: hidden;
+}
+
 
 #container {
     text-align: center;
     vertical-align: middle;
     height: 100%;
     width: 100%;
+    
+    overflow: hidden;
+}
+
+#menu {
+    width: 400px;
+    height: 400px;
+    background: red;
+    position: absolute;
 }

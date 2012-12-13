@@ -4,35 +4,42 @@
     <link href="css/index.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="container">
-        <div id="box" class="block">
-            <span><img src="img/logo_small.png" width="100%" /></span>
-            <p>UNDO</p>
-            <p>SAVE</p>
-            <p>HELP</p>
-            <p>QUIT</p>
-            <p>AUDIO</p>
-            <p onclick="playPause()">PLAY/PAUSE</p>
-            <p onclick="nextSong()">NEXT</p>
-            <p>VOLUME</p>
+    <div id="master">
+        <div id="menu">
+        this shall be the menu and it shall be glorious
         </div>
-        <div id="box2" class="block">
-            <p>SCORE</p>
-            <p id="score">00000</p>
-            <p>BLKS REM</p>
-            <p id="numBlks">00000</p>
-            <p>LEVEL</p>
-            <p id="level">00000</p>
-            <p>SIZE</p>
-            <p id="size">00000</p>
-            <p>MODE</p>
-            <p id="mode">00000</p>
+        <div id="container">
+            <div id="box" class="block">
+                <span><img src="img/logo_small.png" width="100%" /></span>
+                <p onclick="undo()">UNDO</p>
+                <p>SAVE</p>
+                <p>HELP</p>
+                <p>QUIT</p>
+                <p>AUDIO</p>
+                <p onclick="playPause()">PLAY/PAUSE</p>
+                <p onclick="nextSong()">NEXT</p>
+                <p>VOLUME</p>
+            </div>
+            <div id="box2" class="block">
+                <p>SCORE</p>
+                <p id="score">00000</p>
+                <p>BLKS REM</p>
+                <p id="numBlks">00000</p>
+                <p>LEVEL</p>
+                <p id="level">00000</p>
+                <p>SIZE</p>
+                <p id="size">00000</p>
+                <p>MODE</p>
+                <p id="mode">00000</p>
+            </div>
+            <canvas id="gameCanvas">
+                Get you some canvas.
+            </canvas>
         </div>
-        <canvas id="gameCanvas">
-            Get you some canvas.
-        </canvas>
     </div>
+    
 </body>
+<script src="lib/jquery/jquery-1.8.3.min.js"></script>
 <script src="lib/easeljs/easeljs-0.5.0.min.js"></script>
 <script src="lib/tweenjs/tweenjs-0.3.0.min.js"></script>
 <script src="js/index.js"></script>

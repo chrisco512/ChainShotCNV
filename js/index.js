@@ -12,7 +12,9 @@ var mode = "EASY";
 var level = 1;
 var size = 0;
 var score = 0;
+var prevScore = 0;
 var board = [["Y", "Y", "B", "O", "Y", "B", "O", "G", "B", "G", "B"], ["Y", "O", "B", "Y", "B", "O", "Y", "B", "O"], ["R", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O", "G", "B", "G", "B", "G", "B"], ["Y", "O", "Y", "B", "O", "B", "Y", "B", "O", "Y", "O"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "O", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
+var board2 = [["Y", "Y", "B", "O", "Y", "B", "O", "G", "B", "G", "B"], ["Y", "O", "B", "Y", "B", "O", "Y", "B", "O"], ["R", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O", "G", "B", "G", "B", "G", "B"], ["Y", "O", "Y", "B", "O", "B", "Y", "B", "O", "Y", "O"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "O", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
 
 Array.prototype.containsArray = function (val) {
     
@@ -43,7 +45,8 @@ function drawScreen() {
     
     canvas.height = window.innerHeight - 50;
     canvas.width = canvas.height;
-    canvas.style.left = canvas.parentElement.clientWidth / 2 - canvas.width / 2 + 8 + 'px';
+
+    //canvas.style.left = canvas.parentElement.clientWidth / 2 - canvas.width / 2 + 8 + 'px';
 
     if (!boxDOM) {
         var box = document.getElementById("box");
@@ -79,7 +82,7 @@ function drawScreen() {
         stage.addChild(boxDOM2);
 
     }
-
+    //move to game.js
     for (var it = 0; it < stage.getNumChildren(); it++) {
         var bmp = stage.getChildAt(it);
 
@@ -98,14 +101,20 @@ function drawScreen() {
         }
     }
 
+    var $rand = $('#menu')[0];
+    var createRand = new createjs.DOMElement($rand);
+    stage.addChild(createRand);
+
+    var canvasDOM = new createjs.DOMElement(canvas);
+    stage.addChild(canvasDOM);
+
+    createjs.Tween.get(canvasDOM).to({ alpha: .7, x: 800, y: 0, rotation: 0 }, 1000, createjs.Ease.cubicOut);
 
     boxDOM.htmlElement.style.height = canvas.height + 'px';
     boxDOM2.htmlElement.style.height = canvas.height + 'px';
 
     createjs.Tween.get(boxDOM).to({ alpha: .7, x: boxDOM.htmlElement.parentElement.clientWidth / 2 - canvas.width / 2 - boxDOM.htmlElement.clientWidth, y: 0, rotation: 360 }, 20, createjs.Ease.cubicOut);
     createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth / 2 + canvas.width / 2, y: 0, rotation: 360 }, 20, createjs.Ease.cubicOut);
-
-
 }
 
 function updateMenus() {
@@ -148,7 +157,7 @@ audio2.src = "snd/button-4.mp3";
 audio.volume = 0.5;
 audio2.volume = 0.5;
 audio3.autoplay = true;
-audio3.src = audioSources[audioIndex];
+//audio3.src = audioSources[audioIndex];
 
 function nextSong() {
     audioIndex++;
@@ -168,6 +177,23 @@ function playPause() {
         audio3.pause();
 }
 
+function undo() {
+    score = prevScore;
+
+    for (var i = stage.getNumChildren() - 1; i >= 0; i--) {
+        var bmp = stage.getChildAt(i);
+        if (bmp.type === "block")
+            stage.removeChild(bmp);
+    }
+
+    for (var i = 0; i < board2.length; i++) {
+        for (var j = 0; j < board2[i].length; j++) {
+            board[i][j] = board2[i][j];
+        }
+    }
+    initializeBlocks(true);
+    updatePositions();
+}
 
 function init() {
 
@@ -175,8 +201,8 @@ function init() {
 
     stage = new createjs.Stage(canvas);
 
-    //drawScreen();
-    
+    drawScreen();
+
     images = new Image();
     images.onload = handleImageLoad;
     images.onerror = handleImageError;
@@ -191,51 +217,71 @@ function handleImageError(e) {
     console.log("Error loading image : " + e.target.src);
 }
 
+var spriteSheet;
+
+function slideIn() {
+    $(canvas).animate({ left: canvas.parentElement.clientWidth / 2 - canvas.width / 2 + 8 + 'px' }, 2000);
+}
+
 function startGame() {
     drawScreen();
 
     screen_width = canvas.width;
     screen_height = canvas.height;
 
+    initializeBlocks();
+
+    
+    stage.update();
+    createjs.Ticker.addListener(window);
+    createjs.Ticker.useRAF = true;
+    createjs.Ticker.setFPS(60);
+
+    drawScreen();
+}
+
+function initializeBlocks(noTransition) {
     // set up animations
-    var spriteSheet = new createjs.SpriteSheet({
-        images: [images],
-        frames: { width: 150, height: 150, regX: 75, regY: 75 },
-        animations: {
-            A: [0, 0, false],
-            A_I:[0, 1, "A_I", 4],
-            B:  [2, 2, false],
-            B_I:[2, 3, "B_I", 4],
-            C:  [4, 4, false],
-            C_I:[4, 5, "C_I", 4],
-            D:  [6, 6, false],
-            D_I:[6, 7, "D_I", 4],
-            E:  [8, 8, false],
-            E_I:[8, 9, "E_I", 4],
-            F:  [10, 10, false],
-            F_I:[10, 11, "F_I", 4],
-            G:  [12, 12, false],
-            G_I:[12, 13, "G_I", 4],
-            H:  [14, 14, false],
-            H_I:[14, 15, "H_I", 4],
-            I:  [16, 16, false],
-            I_I:[16, 17, "I_I", 4],
-            J:  [18, 18, false],
-            J_I:[18, 19, "J_I", 4],
-            K:  [20, 20, false],
-            K_I:[20, 21, "K_I", 4],
-            L:  [22, 22, false],
-            L_I:[22, 23, "L_I", 4],
-            O:  [24, 24, false],
-            O_I:[24, 25, "O_I", 4],
-            P:  [26, 26, false],
-            P_I:[26, 27, "P_I", 4],
-            R:  [28, 28, false],
-            R_I:[28, 29, "R_I", 4],
-            Y:  [30, 30, false],
-            Y_I:[30, 31, "Y_I", 4],
-        }
-    });
+    if (!spriteSheet) {
+        spriteSheet = new createjs.SpriteSheet({
+            images: [images],
+            frames: { width: 150, height: 150, regX: 75, regY: 75 },
+            animations: {
+                A: [0, 0, false],
+                A_I: [0, 1, "A_I", 4],
+                B: [2, 2, false],
+                B_I: [2, 3, "B_I", 4],
+                C: [4, 4, false],
+                C_I: [4, 5, "C_I", 4],
+                D: [6, 6, false],
+                D_I: [6, 7, "D_I", 4],
+                E: [8, 8, false],
+                E_I: [8, 9, "E_I", 4],
+                F: [10, 10, false],
+                F_I: [10, 11, "F_I", 4],
+                G: [12, 12, false],
+                G_I: [12, 13, "G_I", 4],
+                H: [14, 14, false],
+                H_I: [14, 15, "H_I", 4],
+                I: [16, 16, false],
+                I_I: [16, 17, "I_I", 4],
+                J: [18, 18, false],
+                J_I: [18, 19, "J_I", 4],
+                K: [20, 20, false],
+                K_I: [20, 21, "K_I", 4],
+                L: [22, 22, false],
+                L_I: [22, 23, "L_I", 4],
+                O: [24, 24, false],
+                O_I: [24, 25, "O_I", 4],
+                P: [26, 26, false],
+                P_I: [26, 27, "P_I", 4],
+                R: [28, 28, false],
+                R_I: [28, 29, "R_I", 4],
+                Y: [30, 30, false],
+                Y_I: [30, 31, "Y_I", 4],
+            }
+        });
+    }
 
     //populate num remaining value
     numBlks = board.length * board.length;
@@ -248,17 +294,17 @@ function startGame() {
             bmp.gotoAndPlay(board[i][j]);
 
             bmp.currentFrame = 0;
-            
+
             bmp.onClick = handleClick;
-       
+
             bmp.scaleX = (screen_width / board.length) / bmp.spriteSheet._frameWidth;
             bmp.scaleY = (screen_height / board.length) / bmp.spriteSheet._frameHeight;
-    
+
             bmp.properX = (bmp.spriteSheet._frameWidth / 2 + i * bmp.spriteSheet._frameWidth) * bmp.scaleX;
             bmp.properY = screen_height - bmp.scaleY * (bmp.spriteSheet._frameHeight / 2 + j * bmp.spriteSheet._frameHeight);
 
             bmp.x = bmp.properX;
-            bmp.y = bmp.properY - screen_height - 100;
+            bmp.y = noTransition ? bmp.properY : bmp.properY - screen_height - 100;
             //bmp.properX = bmp.x;
             //bmp.properY = bmp.y;
 
@@ -266,19 +312,10 @@ function startGame() {
             bmp.j = j;
 
             bmp.type = "block";
-    
+
             stage.addChild(bmp);
         }
     }
-
-    
-    stage.update();
-    createjs.Ticker.addListener(window);
-    createjs.Ticker.useRAF = true;
-    createjs.Ticker.setFPS(60);
-
-    drawScreen();
-    
 }
 
 // not really checking collision, but checking to see if the block is in the proper position or not
@@ -418,6 +455,17 @@ function remove(target) {
     removeList.sort(sortRemoveList);
 
     if (removeList.length > 1) {
+        prevScore = score;
+
+        //store current board in board2
+        board2 = [];
+        for (var i = 0; i < board.length; i++) {
+            board2[i] = [];
+            for (var j = 0; j < board[i].length; j++) {
+                board2[i][j] = board[i][j];
+            }
+        }
+
         audio.play();
         score += (removeList.length - 1) * (removeList.length - 1);
         numBlks -= removeList.length;
