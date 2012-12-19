@@ -5,13 +5,31 @@
 </head>
 <body>
     <div id="master">
+        <div id="menu">
+            <p onclick="transition('LEVEL')">START</p>
+            <p onclick="resume()">RESUME</p>
+            <p>HELP</p>
+            <p>ABOUT</p>
+        </div>
+        <div id="level">
+            <p onclick="goToLevel(0)">LEVEL 1</p>
+            <p onclick="goToLevel(1)">LEVEL 2</p>
+            <p onclick="goToLevel(2)">LEVEL 3</p>
+            <p onclick="goToLevel(3)">LEVEL 4</p>
+            <p onclick="goToLevel(4)">LEVEL 5</p>
+            <p onclick="goToLevel(5)">LEVEL 6</p>
+            <p onclick="goToLevel(6)">LEVEL 7</p>
+            <p onclick="goToLevel(7)">LEVEL 8</p>
+            <p onclick="goToLevel(8)">LEVEL 9</p>
+            <p onclick="goToLevel(9)">LEVEL 10</p>
+            <p onclick="goToLevel(10)">LEVEL 11</p>
+        </div>
         <div id="container">
             <div id="box" class="block">
                 <span><img src="img/logo_small.png" width="100%" /></span>
                 <p onclick="undo()">UNDO</p>
-                <p>SAVE</p>
                 <p>HELP</p>
-                <p>QUIT</p>
+                <p onclick="quit()">QUIT</p>
                 <p>AUDIO</p>
                 <p onclick="playPause()">PLAY/PAUSE</p>
                 <p onclick="nextSong()">NEXT</p>
@@ -23,11 +41,11 @@
                 <p>BLKS REM</p>
                 <p id="numBlks">00000</p>
                 <p>LEVEL</p>
-                <p id="level">00000</p>
+                <p id="numLevel">00000</p>
                 <p>SIZE</p>
                 <p id="size">00000</p>
-                <p>MODE</p>
-                <p id="mode">00000</p>
+                <p>DIFFICULTY</p>
+                <p id="difficulty">00000</p>
             </div>
             <canvas id="gameCanvas">
                 Get you some canvas.
@@ -41,4 +59,5 @@
 <script src="lib/tweenjs/tweenjs-0.3.0.min.js"></script>
 <script src="js/index.js"></script>
 <script src="js/game.js"></script>
+<script src="js/boards.js"></script>
 </html>

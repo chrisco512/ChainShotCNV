@@ -28,12 +28,16 @@ function undo() {
             stage.removeChild(bmp);
     }
 
+    board = [];
+
     for (var i = 0; i < board2.length; i++) {
+        board.push(new Array());
         for (var j = 0; j < board2[i].length; j++) {
             board[i][j] = board2[i][j];
         }
     }
     initializeBlocks(true);
+    drawGame();
     updatePositions();
 }
 
@@ -135,8 +139,10 @@ function fadeOut() {
             var bmp = fadeBmps[i];
             stage.removeChild(bmp);
             board[bmp.i].splice(bmp.j, 1);
-            if (board[bmp.i].length === 0)
+            if (board[bmp.i].length === 0) {
                 board.splice(bmp.i, 1);
+                board.push(new Array());
+            }
         }
 
         updatePositions();
@@ -174,6 +180,18 @@ function handleClick(e) {
         clickEnabled = false;
         remove(e.target);
     }
+}
+
+// given a board number, loads the board and initializes the blocks to that board
+function loadBoard(num) {
+    board = boardDirectory[num].slice(0, boardDirectory[num].length);
+    board2 = boardDirectory[num].slice(0, boardDirectory[num].length);
+}
+
+function goToLevel(num) {
+    transition('GAME');
+    loadBoard(num);
+    initializeBlocks();
 }
 
 // remove blocks
@@ -281,6 +299,8 @@ function remove(target) {
         audio2.play();
         clickEnabled = true;
     }
+
+    save();
 }
 
 // pull blocks toward proper position

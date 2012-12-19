@@ -1,4 +1,9 @@
-﻿body {
+﻿@font-face {
+    font-family: 'Agency FB';
+    src: url('AGENCYB.ttf');
+}
+
+body {
     background-image: url("../img/preview3.jpg");
 }
 
@@ -16,6 +21,7 @@ canvas {
 }
 
 body {
+    font-family: 'Agency FB', Arial, sans-serif;
     overflow: hidden;
 }
 
@@ -25,13 +31,19 @@ body {
     vertical-align: middle;
     height: 100%;
     width: 100%;
-    
     overflow: hidden;
 }
 
 #menu {
-    width: 400px;
-    height: 400px;
-    background: red;
+    font-family: 'Agency FB', Arial, sans-serif;
+    width: 100px;
+    background-color: white;
+    position: absolute;
+}
+
+#level {
+    font-family: 'Agency FB', Arial, sans-serif;
+    width: 100px;
+    background-color: white;
     position: absolute;
 }

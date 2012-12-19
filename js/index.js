@@ -8,13 +8,18 @@ var boxDOM, boxDOM2;
 var clickEnabled = true;
 var images;
 var numBlks = 0;
-var mode = "EASY";
+var difficulties = { EASY: "EASY", HARD: "HARD" };
+var difficulty = difficulties.EASY;
 var level = 1;
 var size = 0;
 var score = 0;
 var prevScore = 0;
-var board = [["Y", "Y", "B", "O", "Y", "B", "O", "G", "B", "G", "B"], ["Y", "O", "B", "Y", "B", "O", "Y", "B", "O"], ["R", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O", "G", "B", "G", "B", "G", "B"], ["Y", "O", "Y", "B", "O", "B", "Y", "B", "O", "Y", "O"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "O", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
-var board2 = [["Y", "Y", "B", "O", "Y", "B", "O", "G", "B", "G", "B"], ["Y", "O", "B", "Y", "B", "O", "Y", "B", "O"], ["R", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O", "G", "B", "G", "B", "G", "B"], ["Y", "O", "Y", "B", "O", "B", "Y", "B", "O", "Y", "O"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["R", "G", "B", "G", "B", "G", "B", "G", "B"], ["Y", "O", "B", "G", "B", "G", "B", "G", "B"], ["Y", "Y", "B", "O"], ["Y", "Y", "B", "O"]];
+var board;
+var board2;
+var modes = { MAIN: "MAIN", LEVEL: "LEVEL", GAME: "GAME" };
+var mode = modes.MAIN;
+var canvasDOM, menuDOM, levelDOM;
+
 
 Array.prototype.containsArray = function (val) {
     
@@ -41,8 +46,70 @@ function sortRemoveList(a, b) {
         return -1;
 }
 
+//saves the current state variables
+function save() {
+    localStorage["score"] = score;
+    localStorage["prevScore"] = prevScore;
+    localStorage["numBlks"] = numBlks;
+    localStorage["level"] = level;
+    localStorage["difficulty"] = difficulty;
+    localStorage["size"] = size;
+    localStorage["board"] = JSON.stringify(board);
+    localStorage["board2"] = JSON.stringify(board2);
+}
+
+//this function will store the current state variables in a data file which will be loaded on resume
+function quit() {
+    save();
+    score = 0;
+    numBlks = 0;
+    level = 0;
+    size = 0;
+    board = [];
+    board2 = [];
+
+    for (var i = stage.getNumChildren() - 1; i >= 0; i--) {
+        var bmp = stage.getChildAt(i);
+        if (bmp.type === "block")
+            stage.removeChild(bmp);
+    }
+
+
+    transition(modes.LEVEL);
+    //tear down everything
+    //clear the stage
+    //zero out variables
+
+}
+
+//resumes the last saved game
+function resume() {
+    //make sure localstorage data is defined
+    //get data from save file
+    //initialize variables
+    if (localStorage["score"]) {
+        score = parseInt(localStorage["score"]);
+        prevScore = parseInt(localStorage["prevScore"]);
+        numBlks = parseInt(localStorage["numBlks"]);
+        level = parseInt(localStorage["level"]);
+        difficulty = localStorage["difficulty"];
+        size = parseInt(localStorage["size"]);
+        board = JSON.parse(localStorage["board"]);
+        board2 = JSON.parse(localStorage["board2"]);
+        transition(modes.GAME);
+        initializeBlocks(true);
+        drawGame();
+        updatePositions();
+
+    } else {
+        alert("No previously saved game in storage.");
+    }
+
+    //set up board
+}
+
+
 function drawScreen() {
-    
     canvas.height = window.innerHeight - 50;
     canvas.width = canvas.height;
 
@@ -81,20 +148,62 @@ function drawScreen() {
 
     }
 
-    var $rand = $('#menu')[0];
-    var createRand = new createjs.DOMElement($rand);
-    stage.addChild(createRand);
+    if (!canvasDOM) {
+        var $menu = $('#menu')[0];
+        $menu.style.height = window.innerHeight - 50 + 'px';
+        $menu.style.width = $menu.style.height;
 
-    var canvasDOM = new createjs.DOMElement(canvas);
-    stage.addChild(canvasDOM);
+        var $level = $('#level')[0];
+        $level.style.height = $menu.style.height;
+        $level.style.width = $menu.style.width;
 
-    createjs.Tween.get(canvasDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 20, createjs.Ease.cubicOut);
+        levelDOM = new createjs.DOMElement($level);
+        stage.addChild(levelDOM);
+
+        menuDOM = new createjs.DOMElement($menu);
+        stage.addChild(menuDOM);
+
+        canvasDOM = new createjs.DOMElement(canvas);
+        stage.addChild(canvasDOM);
+    }
+
+    menuDOM.htmlElement.style.height = window.innerHeight - 50 + 'px';
+    menuDOM.htmlElement.style.width = menuDOM.htmlElement.style.height;
+
+    levelDOM.htmlElement.style.height = menuDOM.htmlElement.style.height;
+    levelDOM.htmlElement.style.width = menuDOM.htmlElement.style.width;
 
     boxDOM.htmlElement.style.height = canvas.height + 'px';
     boxDOM2.htmlElement.style.height = canvas.height + 'px';
+        
+    if (mode === modes.MAIN) {
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .7, x: boxDOM.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(menuDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - menuDOM.htmlElement.clientWidth / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+    }
 
-    createjs.Tween.get(boxDOM).to({ alpha: .7, x: boxDOM.htmlElement.parentElement.clientWidth / 2 - canvas.width / 2 - boxDOM.htmlElement.clientWidth, y: 0, rotation: 360 }, 20, createjs.Ease.cubicOut);
-    createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth / 2 + canvas.width / 2, y: 0, rotation: 360 }, 20, createjs.Ease.cubicOut);
+    if (mode === modes.LEVEL) {
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .7, x: boxDOM.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(menuDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - levelDOM.htmlElement.clientWidth / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+    }
+
+    if (mode === modes.GAME) {
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .7, x: boxDOM.htmlElement.parentElement.clientWidth / 2 - canvas.width / 2 - boxDOM.htmlElement.clientWidth, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth / 2 + canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(menuDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+    } //end game mode draw
+}
+
+function transition(nextMode) {
+    mode = nextMode;
+    drawScreen();
 }
 
 function updateMenus() {
@@ -104,14 +213,14 @@ function updateMenus() {
     var $numBlks = document.getElementById("numBlks");
     $numBlks.innerText = numBlks;
 
-    var $level = document.getElementById("level");
+    var $level = document.getElementById("numLevel");
     $level.innerText = level;
 
     var $size = document.getElementById("size");
     $size.innerText = size + " x " + size;
 
-    var $mode = document.getElementById("mode");
-    $mode.innerText = mode;
+    var $difficulty = document.getElementById("difficulty");
+    $difficulty.innerText = difficulty;
 }
 
 window.onresize = function (event) {
@@ -138,7 +247,7 @@ audio2.src = "snd/button-4.mp3";
 audio.volume = 0.5;
 audio2.volume = 0.5;
 audio3.autoplay = true;
-//audio3.src = audioSources[audioIndex];
+//0audio3.src = audioSources[audioIndex];
 
 function nextSong() {
     audioIndex++;
@@ -161,7 +270,6 @@ function playPause() {
 function init() {
 
     canvas = document.getElementById("gameCanvas");
-
     stage = new createjs.Stage(canvas);
 
     drawScreen();
@@ -183,19 +291,16 @@ function handleImageError(e) {
 
 var spriteSheet;
 
-function slideIn() {
-    $(canvas).animate({ left: canvas.parentElement.clientWidth / 2 - canvas.width / 2 + 8 + 'px' }, 2000);
-}
+//function slideIn() {
+  //  $(canvas).animate({ left: canvas.parentElement.clientWidth / 2 - canvas.width / 2 + 8 + 'px' }, 2000);
+//}
 
 function startGame() {
     drawScreen();
 
     screen_width = canvas.width;
     screen_height = canvas.height;
-
-    initializeBlocks();
-
-    
+        
     stage.update();
     createjs.Ticker.addListener(window);
     createjs.Ticker.useRAF = true;
