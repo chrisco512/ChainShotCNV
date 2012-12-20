@@ -198,8 +198,18 @@ function handleClick(e) {
 
 // given a board number, loads the board and initializes the blocks to that board
 function loadBoard(num) {
-    board = boardDirectory[num].slice(0, boardDirectory[num].length);
-    board2 = boardDirectory[num].slice(0, boardDirectory[num].length);
+    board = [];
+    board2 = [];
+
+    for (var i = 0; i < boardDirectory[num].length; i++) {
+        board.push(new Array());
+        board2.push(new Array());
+
+        for (var j = 0; j < boardDirectory[num][i].length; j++) {
+            board[i][j] = boardDirectory[num][i][j];
+            board2[i][j] = boardDirectory[num][i][j];
+        }
+    }
 }
 
 function goToLevel(num) {
