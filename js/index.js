@@ -18,7 +18,8 @@ var board;
 var board2;
 var modes = { MAIN: "MAIN", LEVEL: "LEVEL", GAME: "GAME" };
 var mode = modes.MAIN;
-var canvasDOM, menuDOM, levelDOM;
+var canvasDOM, menuDOM, levelDOM, doneDOM;
+var gameComplete;
 
 
 Array.prototype.containsArray = function (val) {
@@ -157,18 +158,30 @@ function drawScreen() {
         $level.style.height = $menu.style.height;
         $level.style.width = $menu.style.width;
 
+        var $done = $('#done')[0];
+        $done.style.height = "100px";
+        $done.style.width = "100px";
+
+        doneDOM = new createjs.DOMElement($done);
+        stage.addChild(doneDOM);
+
+
         levelDOM = new createjs.DOMElement($level);
         stage.addChild(levelDOM);
 
         menuDOM = new createjs.DOMElement($menu);
         stage.addChild(menuDOM);
-
+        
         canvasDOM = new createjs.DOMElement(canvas);
         stage.addChild(canvasDOM);
+
     }
 
     menuDOM.htmlElement.style.height = window.innerHeight - 50 + 'px';
     menuDOM.htmlElement.style.width = menuDOM.htmlElement.style.height;
+
+    doneDOM.htmlElement.style.height = "100px";
+    doneDOM.htmlElement.style.width = "100px";
 
     levelDOM.htmlElement.style.height = menuDOM.htmlElement.style.height;
     levelDOM.htmlElement.style.width = menuDOM.htmlElement.style.width;
@@ -182,6 +195,7 @@ function drawScreen() {
         createjs.Tween.get(boxDOM).to({ alpha: .7, x: boxDOM.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
         createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
         createjs.Tween.get(menuDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - menuDOM.htmlElement.clientWidth / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
     }
 
     if (mode === modes.LEVEL) {
@@ -190,6 +204,7 @@ function drawScreen() {
         createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
         createjs.Tween.get(menuDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
         createjs.Tween.get(levelDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - levelDOM.htmlElement.clientWidth / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
     }
 
     if (mode === modes.GAME) {
@@ -198,7 +213,9 @@ function drawScreen() {
         createjs.Tween.get(boxDOM2).to({ alpha: .7, x: boxDOM2.htmlElement.parentElement.clientWidth / 2 + canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
         createjs.Tween.get(menuDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
         createjs.Tween.get(levelDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-    } //end game mode draw
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
+    }
+    //end game mode draw
 }
 
 function transition(nextMode) {

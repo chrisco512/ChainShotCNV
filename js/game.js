@@ -15,6 +15,12 @@
         }
     }
 
+    if (mode === modes.GAME && gameComplete) {
+        createjs.Tween.get(doneDOM).to({ alpha: 1, visible: true, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
+    } else {
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
+    }
+
     stage.update();
 }
 
@@ -37,8 +43,9 @@ function undo() {
         }
     }
     initializeBlocks(true);
-    drawGame();
     updatePositions();
+    checkDone();
+    drawGame();
 }
 
 function initializeBlocks(noTransition) {
@@ -84,8 +91,13 @@ function initializeBlocks(noTransition) {
         });
     }
 
+    numBlks = 0;
+
     //populate num remaining value
-    numBlks = board.length * board.length;
+    for (var i = 0; i < board.length; i++) {
+        numBlks += board[i].length;
+    }
+
     size = board.length;
 
     //add bead animations to the stage
@@ -147,6 +159,8 @@ function fadeOut() {
 
         updatePositions();
         createjs.Ticker.removeListener(fadeOut);
+        checkDone();
+        drawGame();
         clickEnabled = true;
     }
 }
@@ -189,13 +203,15 @@ function loadBoard(num) {
 }
 
 function goToLevel(num) {
+    level = num + 1;
     transition('GAME');
     loadBoard(num);
     initializeBlocks();
+    gameComplete = false;
 }
 
 // remove blocks
-function remove(target) {
+function remove(target, noRemove) {
     var removeList = [];
     var visitList = [];
     var visitedList = [];
@@ -258,7 +274,7 @@ function remove(target) {
 
     removeList.sort(sortRemoveList);
 
-    if (removeList.length > 1) {
+    if (!noRemove && removeList.length > 1) {
         prevScore = score;
 
         //store current board in board2
@@ -293,14 +309,36 @@ function remove(target) {
                 stageIndex--;
             }
         }
-
         createjs.Ticker.addListener(fadeOut);
     } else {
-        audio2.play();
-        clickEnabled = true;
+        if (!noRemove) {
+            audio2.play();
+            clickEnabled = true;
+        }
     }
 
     save();
+
+    if (noRemove && removeList.length > 1) {
+        return false;
+    }
+
+    return true;
+}
+
+//check to see if game is complete
+function checkDone() {
+    var complete = true;
+    for (child in stage.children) {
+        if (stage.children[child].type === "block") {
+            complete = remove(stage.children[child], true);
+            if (!complete) {
+                gameComplete = false;
+                return;
+            }
+        }
+    }
+    gameComplete = true;
 }
 
 // pull blocks toward proper position
