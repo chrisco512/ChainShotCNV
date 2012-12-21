@@ -9,7 +9,7 @@ I decided to use this library to recreate my SameGame/ChainShots project for the
 
 I call the game, BlockShots.  
 
-The premise of the game is simple, you have stacks of blocks arranged in a grid.  In easy mode, if there is a group of 2 or more blocks connected in a Von Neumann pattern, then you can click on those blocks and remove them.  The blocks above will fall down.  When an entire column is removed, the columns on the right slide over to butt up against those on the left.  
+The premise of the game is simple, you have stacks of blocks arranged in a grid.  In easy mode, if there is a group of 2 or more blocks with the same color connected in a Von Neumann pattern, then you can click on those blocks and remove them.  The blocks above will fall down.  When an entire column is removed, the columns on the right slide over to butt up against those on the left.  
 
 That's it.
 
