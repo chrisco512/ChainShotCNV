@@ -20,16 +20,92 @@ var modes = { MAIN: "MAIN", LEVEL: "LEVEL", GAME: "GAME" };
 var mode = modes.MAIN;
 var canvasDOM, menuDOM, levelDOM, doneDOM;
 var gameComplete;
+var starOn = "img/star-on.png";
+var starOff = "img/star-off.png";
 
+var stats = {
+    EASY: {
+        RATING: new Array(11),
+        TOP_SCORE: new Array(11),
+        MIN_BLOCKS: new Array(11)
+    },
+    HARD: {
+        RATING: new Array(11),
+        TOP_SCORE: new Array(11),
+        MIN_BLOCKS: new Array(11)
+    }
+};
 
-Array.prototype.containsArray = function (val) {
+function populateStats() {
+    var $stats = $('.stats');
     
+    for (var i = 0; i < $stats.length; i++) {
+        var statblock = $stats[i];
+
+        //set up stars
+        var rating = stats[difficulty].RATING[i];
+        var $images = $(statblock).find('img');
+        
+        for (var j = 0; j < $images.length; j++) {
+            var image = $images[j];
+            if (rating === undefined) {
+                image.src = starOff;
+            } else if ((j + 1) > rating) {
+                image.src = starOff;
+            } else {
+                image.src = starOn;
+            }
+        }
+        
+        //populate top score & min blocks
+        var $data = $(statblock).find('td');
+        var topScore = stats[difficulty].TOP_SCORE[i];
+        var minBlocks = stats[difficulty].MIN_BLOCKS[i];
+        topScore !== undefined ? $data[0].innerText = topScore : $data[0].innerText = "-";
+        minBlocks !== undefined ? $data[1].innerText = minBlocks : $data[1].innerText = "-";
+    }
+
+}
+
+function calculateStats() {
+    //look at blocks remaining
+    //look at score
+    //look at level number
+    var levelIndex = level - 1;
+    var prevMinBlocks = stats[difficulty].MIN_BLOCKS[levelIndex];
+    var prevMaxScore = stats[difficulty].TOP_SCORE[levelIndex];
+
+    if (numBlks < prevMinBlocks || prevMinBlocks === undefined)
+        stats[difficulty].MIN_BLOCKS[levelIndex] = numBlks;
+    if (score > prevMaxScore || prevMaxScore === undefined)
+        stats[difficulty].TOP_SCORE[levelIndex] = score;
+
+    var ratio = numBlks / (size * size);
+
+    if (ratio === 0)
+        stats[difficulty].RATING[levelIndex] = 5;
+    else if (ratio < 0.05)
+        stats[difficulty].RATING[levelIndex] = 4;
+    else if (ratio < 0.10)
+        stats[difficulty].RATING[levelIndex] = 3;
+    else if (ratio < 0.15)
+        stats[difficulty].RATING[levelIndex] = 2;
+    else if (ratio < 0.20)
+        stats[difficulty].RATING[levelIndex] = 1;
+    else {
+        stats[difficulty].RATING[levelIndex] = 0;
+    }
+}
+
+
+Array.prototype.containsArray = function(val) {
+
     var hash = {};
     for (var i = 0; i < this.length; i++) {
         hash[this[i]] = i;
     }
     return hash.hasOwnProperty(val);
-}
+};
 
 //sorts removes so that board clears out correctly
 function sortRemoveList(a, b) {
@@ -220,6 +296,9 @@ function drawScreen() {
 
 function transition(nextMode) {
     mode = nextMode;
+    if (mode === modes.LEVEL) {
+        populateStats();
+    }
     drawScreen();
 }
 

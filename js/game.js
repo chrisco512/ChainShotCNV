@@ -349,6 +349,7 @@ function checkDone() {
         }
     }
     gameComplete = true;
+    calculateStats();
 }
 
 // pull blocks toward proper position
