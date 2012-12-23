@@ -23,20 +23,26 @@ var gameComplete;
 var starOn = "img/star-on.png";
 var starOff = "img/star-off.png";
 
-var stats = {
-    EASY: {
-        RATING: new Array(11),
-        TOP_SCORE: new Array(11),
-        MIN_BLOCKS: new Array(11)
-    },
-    HARD: {
-        RATING: new Array(11),
-        TOP_SCORE: new Array(11),
-        MIN_BLOCKS: new Array(11)
-    }
-};
-
 function populateStats() {
+    var stats = localStorage["stats"];
+    if (!stats) {
+        stats = {
+            EASY: {
+                RATING: new Array(11),
+                TOP_SCORE: new Array(11),
+                MIN_BLOCKS: new Array(11)
+            },
+            HARD: {
+                RATING: new Array(11),
+                TOP_SCORE: new Array(11),
+                MIN_BLOCKS: new Array(11)
+            }
+        };
+        localStorage["stats"] = JSON.stringify(stats);
+    } else {
+        stats = JSON.parse(stats);
+    }
+
     var $stats = $('.stats');
     
     for (var i = 0; i < $stats.length; i++) {
@@ -68,6 +74,8 @@ function populateStats() {
 }
 
 function calculateStats() {
+    var stats = JSON.parse(localStorage["stats"]);
+
     //look at blocks remaining
     //look at score
     //look at level number
@@ -75,26 +83,33 @@ function calculateStats() {
     var prevMinBlocks = stats[difficulty].MIN_BLOCKS[levelIndex];
     var prevMaxScore = stats[difficulty].TOP_SCORE[levelIndex];
 
-    if (numBlks < prevMinBlocks || prevMinBlocks === undefined)
+    if (numBlks < prevMinBlocks || prevMinBlocks === undefined || prevMinBlocks === null)
         stats[difficulty].MIN_BLOCKS[levelIndex] = numBlks;
-    if (score > prevMaxScore || prevMaxScore === undefined)
+    if (score > prevMaxScore || prevMaxScore === undefined || prevMaxScore === null)
         stats[difficulty].TOP_SCORE[levelIndex] = score;
 
     var ratio = numBlks / (size * size);
-
+    var prevRating = stats[difficulty].RATING[levelIndex];
+    var curRating;
+    
     if (ratio === 0)
-        stats[difficulty].RATING[levelIndex] = 5;
+        curRating = 5;
     else if (ratio < 0.05)
-        stats[difficulty].RATING[levelIndex] = 4;
+        curRating = 4;
     else if (ratio < 0.10)
-        stats[difficulty].RATING[levelIndex] = 3;
+        curRating = 3;
     else if (ratio < 0.15)
-        stats[difficulty].RATING[levelIndex] = 2;
+        curRating = 2;
     else if (ratio < 0.20)
-        stats[difficulty].RATING[levelIndex] = 1;
+        curRating = 1;
     else {
-        stats[difficulty].RATING[levelIndex] = 0;
+        curRating = 0;
     }
+
+    if (curRating > prevRating || prevMinBlocks === undefined || prevMinBlocks === null)
+        stats[difficulty].RATING[levelIndex] = curRating;
+
+    localStorage["stats"] = JSON.stringify(stats);
 }
 
 
