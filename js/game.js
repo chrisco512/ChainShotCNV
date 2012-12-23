@@ -36,7 +36,7 @@ function undo() {
 
     board = [];
 
-    for (var i = 0; i < board2.length; i++) {
+    for (i = 0; i < board2.length; i++) {
         board.push(new Array());
         for (var j = 0; j < board2[i].length; j++) {
             board[i][j] = board2[i][j];

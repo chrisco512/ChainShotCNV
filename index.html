@@ -2,6 +2,7 @@
 <html>
 <head>
     <link href="css/index.css" rel="stylesheet" />
+    <link href="lib/rating/jquery.rating.css" rel="stylesheet" />
 </head>
 <body>
     <div id="master">
@@ -13,17 +14,44 @@
         </div>
         <div id="level">
             <p onclick="transition('MAIN')">GO BACK</p>
-            <p onclick="goToLevel(0)">LEVEL 1</p>
-            <p onclick="goToLevel(1)">LEVEL 2</p>
-            <p onclick="goToLevel(2)">LEVEL 3</p>
-            <p onclick="goToLevel(3)">LEVEL 4</p>
-            <p onclick="goToLevel(4)">LEVEL 5</p>
-            <p onclick="goToLevel(5)">LEVEL 6</p>
-            <p onclick="goToLevel(6)">LEVEL 7</p>
-            <p onclick="goToLevel(7)">LEVEL 8</p>
-            <p onclick="goToLevel(8)">LEVEL 9</p>
-            <p onclick="goToLevel(9)">LEVEL 10</p>
-            <p onclick="goToLevel(10)">LEVEL 11</p>
+            <div class="stats" onclick="goToLevel(0)">
+                <div class="stats-stars">
+                    <p>LEVEL 1</p>
+                    <p>
+                        <img src="img/star-on.png" width="25" />
+                        <img src="img/star-on.png" width="25" />
+                        <img src="img/star-off.png" width="25" />
+                        <img src="img/star-off.png" width="25" />
+                        <img src="img/star-off.png" width="25" />
+                    </p>
+                </div>
+                <div class="stats-scores">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>TOP SCORE</th>
+                                <th>MIN BLOCKS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>5000</th>
+                                <th>24</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="stats" onclick="goToLevel(1)">LEVEL 2</div>
+            <div class="stats" onclick="goToLevel(2)">LEVEL 3</div>
+            <div class="stats" onclick="goToLevel(3)">LEVEL 4</div>
+            <div class="stats" onclick="goToLevel(4)">LEVEL 5</div>
+            <div class="stats" onclick="goToLevel(5)">LEVEL 6</div>
+            <div class="stats" onclick="goToLevel(6)">LEVEL 7</div>
+            <div class="stats" onclick="goToLevel(7)">LEVEL 8</div>
+            <div class="stats" onclick="goToLevel(8)">LEVEL 9</div>
+            <div class="stats" onclick="goToLevel(9)">LEVEL 10</div>
+            <div class="stats" onclick="goToLevel(10)">LEVEL 11</div>
         </div>
         <div id="container">
             <div id="box" class="block">
@@ -59,6 +87,7 @@
     
 </body>
 <script src="lib/jquery/jquery-1.8.3.min.js"></script>
+<script src="lib/rating/jquery.rating.pack.js"></script>
 <script src="lib/easeljs/easeljs-0.5.0.min.js"></script>
 <script src="lib/tweenjs/tweenjs-0.3.0.min.js"></script>
 <script src="js/index.js"></script>

@@ -5,6 +5,8 @@
 
 body {
     background-image: url("../img/preview3.jpg");
+    font-family: 'Agency FB', Arial, sans-serif;
+    overflow: hidden;
 }
 
 canvas {
@@ -20,11 +22,52 @@ canvas {
     text-align: center;
 }
 
-body {
-    font-family: 'Agency FB', Arial, sans-serif;
-    overflow: hidden;
+.stats {
+    height: 100px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+    background-color: red;
+    position: relative;
 }
 
+.stats:active {
+    width: 87%;
+    height: 95px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    padding: 10px;
+    height: 75%;
+    top: 5%;
+    position: absolute;
+    text-align: center;
+}
+
+.stats-scores {
+    height: 100%;
+    width: 50%;
+    right: 5px;
+    top: 0;
+    text-align: right;
+    position: absolute;
+}
+.stats-stars {
+    height: 100%;
+    width: 50%;
+    left: 5px;
+    top: 0;
+    text-align: left;
+    position: absolute;
+}
+
+.basic {
+    width: 50%;
+    height: 50%;
+}
 
 #container {
     text-align: center;
@@ -51,4 +94,5 @@ body {
     width: 100px;
     background-color: white;
     position: absolute;
+    overflow: scroll;
 }

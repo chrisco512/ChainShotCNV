@@ -343,4 +343,5 @@ function checkCollision(bmp) {
 
 window.onload = function () {
     init();
+    $(".star").rating('select', 4);
 };
