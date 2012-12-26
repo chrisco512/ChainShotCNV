@@ -18,7 +18,7 @@ canvas {
     height: 44%;
     position: relative;
     float: left;
-    font-size: 4em;
+    font-size: 3em;
     font-weight: bold;
     color: white;
 }
@@ -27,7 +27,7 @@ canvas {
         width: 41%;
         height: 41%;
         margin-left: 6%;
-        margin-top: 6%;
+        margin-top: 7%;
     }
 
     .grid-block > p {
@@ -48,7 +48,6 @@ canvas {
     .green-block:active {
         background-color: red;
     }
-
     .orange-block {
         background-color: orange;
     }
