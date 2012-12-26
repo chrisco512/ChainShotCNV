@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>3006356a-368c-47b8-bce1-66b48654f862</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0'">
+    <VisualStudioVersion>11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).Default.props" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).props" />
+  <PropertyGroup>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetPlatformVersion>8.0</TargetPlatformVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageCertificateKeyFile>ChainShotsWin8_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppxManifest Include="package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <Content Include="boards.txt" />
+    <Content Include="ChainShotsWin8.sln" />
+    <Content Include="css\AGENCYB.TTF" />
+    <Content Include="css\AGENCYR.TTF" />
+    <Content Include="css\default.css" />
+    <Content Include="css\index.css" />
+    <Content Include="css\jRating.jquery.css.exclude" />
+    <Content Include="default.html" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\smalllogo.png" />
+    <Content Include="images\splashscreen.png" />
+    <Content Include="images\storelogo.png" />
+    <Content Include="img\01-star-best.gif" />
+    <Content Include="img\anim-bstars.gif" />
+    <Content Include="img\baseAnimation.pdn.exclude" />
+    <Content Include="img\baseblock.pdn" />
+    <Content Include="img\baseDot.pdn.exclude" />
+    <Content Include="img\baseJewel.pdn.exclude" />
+    <Content Include="img\block01.png" />
+    <Content Include="img\block02.png" />
+    <Content Include="img\block03.png" />
+    <Content Include="img\block04.png" />
+    <Content Include="img\block05.png" />
+    <Content Include="img\block06.png" />
+    <Content Include="img\block07.png" />
+    <Content Include="img\block08.png" />
+    <Content Include="img\block09.png" />
+    <Content Include="img\block10.png" />
+    <Content Include="img\block11.png" />
+    <Content Include="img\block12.png" />
+    <Content Include="img\block13.png" />
+    <Content Include="img\block14.png" />
+    <Content Include="img\block15.png" />
+    <Content Include="img\block16.png" />
+    <Content Include="img\blue-lightning-flash-sky.gif" />
+    <Content Include="img\cosmic.gif" />
+    <Content Include="img\dot_A.png" />
+    <Content Include="img\dot_B.png.exclude" />
+    <Content Include="img\dot_C.png.exclude" />
+    <Content Include="img\dot_D.png.exclude" />
+    <Content Include="img\dot_E.png.exclude" />
+    <Content Include="img\dot_F.png.exclude" />
+    <Content Include="img\dot_G.png.exclude" />
+    <Content Include="img\dot_H.png.exclude" />
+    <Content Include="img\dot_I.png.exclude" />
+    <Content Include="img\dot_J.png.exclude" />
+    <Content Include="img\dot_K.png.exclude" />
+    <Content Include="img\dot_L.png.exclude" />
+    <Content Include="img\dot_O.png.exclude" />
+    <Content Include="img\dot_P.png.exclude" />
+    <Content Include="img\dot_R.png.exclude" />
+    <Content Include="img\dot_Y.png.exclude" />
+    <Content Include="img\fire.jpg.exclude" />
+    <Content Include="img\grid.png" />
+    <Content Include="img\grunge-background-2.jpg.exclude" />
+    <Content Include="img\grunge-background-seamless4.jpg" />
+    <Content Include="img\grunge-background1.jpg" />
+    <Content Include="img\grunge.jpg" />
+    <Content Include="img\grunge2.jpg" />
+    <Content Include="img\jewelSheet.png" />
+    <Content Include="img\jewel_A.png.exclude" />
+    <Content Include="img\jewel_B.png.exclude" />
+    <Content Include="img\jewel_C.png.exclude" />
+    <Content Include="img\jewel_D.png.exclude" />
+    <Content Include="img\jewel_E.png.exclude" />
+    <Content Include="img\jewel_F.png.exclude" />
+    <Content Include="img\jewel_G.png.exclude" />
+    <Content Include="img\jewel_H.png.exclude" />
+    <Content Include="img\jewel_I.png.exclude" />
+    <Content Include="img\jewel_J.png.exclude" />
+    <Content Include="img\jewel_K.png.exclude" />
+    <Content Include="img\jewel_L.png.exclude" />
+    <Content Include="img\jewel_O.png.exclude" />
+    <Content Include="img\jewel_P.png.exclude" />
+    <Content Include="img\jewel_R.png.exclude" />
+    <Content Include="img\jewel_Y.png.exclude" />
+    <Content Include="img\lightning-storm-blue-raining.gif" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\logo_small.png" />
+    <Content Include="img\prev-21.jpg" />
+    <Content Include="img\preview1.pdn" />
+    <Content Include="img\preview10.jpg" />
+    <Content Include="img\preview2.pdn" />
+    <Content Include="img\preview3.jpg" />
+    <Content Include="img\preview3.pdn" />
+    <Content Include="img\preview4.pdn" />
+    <Content Include="img\preview5.pdn" />
+    <Content Include="img\preview6.pdn" />
+    <Content Include="img\preview7.pdn" />
+    <Content Include="img\preview8.pdn" />
+    <Content Include="img\preview9.jpg" />
+    <Content Include="img\rosy-sky-watercolor.jpg" />
+    <Content Include="img\rosy-yellow-sky-watercolor.jpg" />
+    <Content Include="img\snow1.gif" />
+    <Content Include="img\snow2.gif" />
+    <Content Include="img\snow3.gif" />
+    <Content Include="img\space-black-large.gif" />
+    <Content Include="img\space.jpg" />
+    <Content Include="img\spriteSheet.pdn.exclude" />
+    <Content Include="img\stained-glass-dark-background.jpg" />
+    <Content Include="img\stained-glass-purple.jpg" />
+    <Content Include="img\stained-glass-swimmingpool-blue.jpg" />
+    <Content Include="img\star-off.png" />
+    <Content Include="img\star-on.png" />
+    <Content Include="img\starfiel.gif" />
+    <Content Include="img\stars.png" />
+    <Content Include="img\stars2.png" />
+    <Content Include="img\stars3.png" />
+    <Content Include="img\stars4.png" />
+    <Content Include="img\starsglow1.gif" />
+    <Content Include="img\sweet-star.gif" />
+    <Content Include="index.html" />
+    <Content Include="js\boards.js" />
+    <Content Include="js\default.js" />
+    <Content Include="js\game.js" />
+    <Content Include="js\index.js" />
+    <Content Include="js\menu.js" />
+    <Content Include="lib\easeljs\easeljs-0.5.0.min.js" />
+    <Content Include="lib\jquery\jquery-1.8.3.min.js" />
+    <Content Include="lib\jquery\jRating.jquery.js.exclude" />
+    <Content Include="lib\rating\delete.gif" />
+    <Content Include="lib\rating\jquery.rating.css" />
+    <Content Include="lib\rating\jquery.rating.pack.js" />
+    <Content Include="lib\rating\star.gif" />
+    <Content Include="lib\tweenjs\tweenjs-0.3.0.min.js" />
+    <Content Include="save.txt" />
+    <Content Include="snd\button-1.mp3" />
+    <Content Include="snd\button-1.wav" />
+    <Content Include="snd\button-14.mp3" />
+    <Content Include="snd\button-2.mp3" />
+    <Content Include="snd\button-3.mp3" />
+    <Content Include="snd\button-33.mp3" />
+    <Content Include="snd\button-37.mp3" />
+    <Content Include="snd\button-4.mp3" />
+    <Content Include="snd\button-43.mp3" />
+    <Content Include="snd\button-5.mp3" />
+    <Content Include="snd\button-6.mp3" />
+    <Content Include="snd\cartoon058.mp3" />
+    <Content Include="snd\cartoon092.mp3" />
+    <Content Include="snd\destination.mp3" />
+    <Content Include="snd\heart-of-the-sea.mp3" />
+    <Content Include="snd\iron-man.mp3" />
+    <Content Include="snd\midnight-ride.mp3" />
+    <Content Include="snd\nature019.mp3" />
+    <Content Include="snd\nature019.wav" />
+    <Content Include="snd\nature035.mp3" />
+    <Content Include="snd\nature035.wav" />
+    <Content Include="snd\scifi062.mp3" />
+    <Content Include="snd\scifi062.wav" />
+    <Content Include="snd\scifi065.mp3" />
+    <None Include="ChainShotsWin8_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Microsoft.WinJS.1.0, Version=1.0" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
+  <!-- To modify your build process, add your task inside one of the targets below then uncomment
+       that target and the DisableFastUpToDateCheck PropertyGroup. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <PropertyGroup>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+  </PropertyGroup>
+  -->
+</Project>
