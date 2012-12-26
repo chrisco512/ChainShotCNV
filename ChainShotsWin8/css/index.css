@@ -1,27 +1,29 @@
-﻿body {
-    background-image: url("../img/preview3.jpg");
-    font-family: 'Agency FB', Arial, sans-serif;
-    overflow: hidden;
-    color: black;
-}
+﻿@font-face { font-family: 'Agency'; src: url('AGENCYB.TTF'); } 
 
-canvas {
-    background-image: url("../img/starfiel.gif");
-    position:absolute;
+    body {
+        background-image: url("../img/preview3.jpg");
+        font-family: 'Agency', Arial, sans-serif;
+        overflow: hidden;
+        color: black;
+    }
 
-}
+    canvas {
+        background-image: url("../img/starfiel.gif");
+        position:absolute;
 
-.grid-block {
-    margin-left: 4%;
-    margin-top: 4%;
-    width: 44%;
-    height: 44%;
-    position: relative;
-    float: left;
-    font-size: 3em;
-    font-weight: bold;
-    color: white;
-}
+    }
+
+    .grid-block {
+        margin-left: 4%;
+        margin-top: 4%;
+        width: 44%;
+        height: 44%;
+        position: relative;
+        float: left;
+        font-size: 3em;
+        font-weight: bold;
+        color: white;
+    }
 
     .grid-block:active {
         width: 41%;
@@ -51,89 +53,101 @@ canvas {
     .orange-block {
         background-color: orange;
     }
-
     .orange-block:active {
         background-color: blue;
     }
+    .red-block:active {
+        background-color: green;
+    }
 
-.block {
-    width: 100px;
-    background-color: ghostwhite;
-    opacity: .50;
-    text-align: center;
-}
+    .red-block {
+        background-color: yellow;
+    }
+    .blue-block:active {
+        background-color: orange;
+    }
+    .blue-block {
+        background-color: skyblue;
+    }
 
-.stats {
-    height: 100px;
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 15px;
-    background-color: red;
-    position: relative;
-}
 
-.stats:active {
-    width: 87%;
-    height: 95px;
-    margin-bottom: 20px;
-}
+    .block {
+        width: 100px;
+        background-color: ghostwhite;
+        opacity: .50;
+        text-align: center;
+    }
 
-table {
-    width: 100%;
-    padding: 10px;
-    height: 75%;
-    top: 5%;
-    position: absolute;
-    text-align: center;
-}
+    .stats {
+        height: 100px;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 15px;
+        position: relative;
+    }
 
-.stats-scores {
-    height: 100%;
-    width: 50%;
-    right: 5px;
-    top: 0;
-    text-align: right;
-    position: absolute;
-}
-.stats-stars {
-    height: 100%;
-    width: 50%;
-    left: 5px;
-    top: 0;
-    text-align: left;
-    position: absolute;
-}
+    .stats:active {
+        width: 87%;
+        height: 95px;
+        margin-bottom: 20px;
+    }
 
-.basic {
-    width: 50%;
-    height: 50%;
-}
+    table {
+        width: 100%;
+        padding: 10px;
+        height: 75%;
+        top: 5%;
+        position: absolute;
+        text-align: center;
+    }
 
-#container {
-    text-align: center;
-    vertical-align: middle;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-}
+    .stats-scores {
+        height: 100%;
+        width: 50%;
+        right: 5px;
+        top: 0;
+        text-align: right;
+        position: absolute;
+    }
+    .stats-stars {
+        height: 100%;
+        width: 50%;
+        left: 5px;
+        top: 0;
+        text-align: left;
+        position: absolute;
+    }
 
-#done {
-    width: 100px;
-    background-color: white;
-}
+    .basic {
+        width: 50%;
+        height: 50%;
+    }
 
-#menu {
-    font-family: 'Agency FB', Arial, sans-serif;
-    width: 100px;
-    background-color: rgba(255,255,255,0.75);
-    position: absolute;
-}
+    #container {
+        text-align: center;
+        vertical-align: middle;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
 
-#level {
-    font-family: 'Agency FB', Arial, sans-serif;
-    width: 100px;
-    background-color: rgba(255,255,255,0.75);
-    position: absolute;
-    overflow: scroll;
-}
+    #done {
+        width: 100px;
+        background-color: white;
+    }
+
+    #menu {
+        font-family: 'Agency FB', Arial, sans-serif;
+        width: 100px;
+        background-color: rgba(255,255,255,0.75);
+        position: absolute;
+    }
+
+    #level {
+        font-family: 'Agency FB', Arial, sans-serif;
+        width: 100px;
+        background-color: rgba(255,255,255,0.75);
+        position: absolute;
+        overflow: scroll;
+    }
