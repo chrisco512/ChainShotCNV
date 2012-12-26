@@ -1,48 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-
-  <Identity
-    Name="3006356a-368c-47b8-bce1-66b48654f862"
-    Version="1.0.0.0"
-    Publisher="CN=Chris" />
-
+  <Identity Name="3006356a-368c-47b8-bce1-66b48654f862" Version="1.0.0.0" Publisher="CN=Chris" />
   <Properties>
     <DisplayName>ChainShotsWin8</DisplayName>
     <PublisherDisplayName>Chris</PublisherDisplayName>
     <Logo>images\storelogo.png</Logo>
   </Properties>
-
   <Prerequisites>
     <OSMinVersion>6.2.1</OSMinVersion>
     <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
   </Prerequisites>
-
   <Resources>
     <Resource Language="x-generate" />
   </Resources>
-
   <Applications>
-    <Application 
-      Id="App"
-      StartPage="default.html">
-
-      <VisualElements
-        DisplayName="ChainShotsWin8"
-        Logo="images\logo.png"
-        SmallLogo="images\smalllogo.png"
-        Description="ChainShotsWin8"
-        ForegroundText="light"
-        BackgroundColor="#464646">
-
+    <Application Id="App" StartPage="default.html">
+      <VisualElements DisplayName="BlockShots" Logo="images\logo.png" SmallLogo="images\smalllogo.png" Description="BlockShots is a puzzle game based on SameGame or ChainShots.  The premise is to click on a set of same-colored blocks to clear that set.  Once the set is cleared, the blocks above fall down, creating potentially new links or chains of blocks.  This is a classic puzzle game implemented in a rich, graphical interface with fun sound effects and music.  Enjoy this game in two modes of difficulty!  All 11 levels of this game can be cleared, can YOU clear them all?  Challenge yourself!" ForegroundText="light" BackgroundColor="#464646">
         <DefaultTile ShowName="allLogos" />
         <SplashScreen Image="images\splashscreen.png" />
-
+        <InitialRotationPreference>
+          <Rotation Preference="landscape" />
+          <Rotation Preference="landscapeFlipped" />
+        </InitialRotationPreference>
       </VisualElements>
     </Application>
   </Applications>
-
   <Capabilities>
     <Capability Name="internetClient" />
   </Capabilities>
-
 </Package>

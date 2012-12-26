@@ -42,7 +42,14 @@
             Pac Man designed by Paulo Volkova from The Noun Project
         </div>
         <div id="level">
-            <p onclick="transition('MAIN')">GO BACK</p>
+            <div style="position: relative; height: 75px; margin-bottom: 25px;">
+                <div class="go-back" onclick="transition('MAIN')">
+                    <img src="img/leftarrow.png" style="vertical-align: middle; height: 75px;" /><span>GO BACK</span>
+                </div>
+                <div class="resume" onclick="resume()">
+                    <span>RESUME</span><img src="img/rightarrow.png" style="vertical-align: middle; height: 75px;" />
+                </div>
+            </div>
             <div class="stats blue-block" onclick="goToLevel(0)">
                 <div class="stats-stars">
                     <p>LEVEL 1</p>

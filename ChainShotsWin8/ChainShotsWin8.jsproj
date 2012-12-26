@@ -130,6 +130,8 @@
     <Content Include="img\jewel_P.png.exclude" />
     <Content Include="img\jewel_R.png.exclude" />
     <Content Include="img\jewel_Y.png.exclude" />
+    <Content Include="img\leftarrow.jpg" />
+    <Content Include="img\leftarrow.png" />
     <Content Include="img\lightning-storm-blue-raining.gif" />
     <Content Include="img\logo.png" />
     <Content Include="img\logo_small.png" />
@@ -148,6 +150,8 @@
     <Content Include="img\preview7.pdn" />
     <Content Include="img\preview8.pdn" />
     <Content Include="img\preview9.jpg" />
+    <Content Include="img\rightarrow.jpg" />
+    <Content Include="img\rightarrow.png" />
     <Content Include="img\rosy-sky-watercolor.jpg" />
     <Content Include="img\rosy-yellow-sky-watercolor.jpg" />
     <Content Include="img\snow1.gif" />

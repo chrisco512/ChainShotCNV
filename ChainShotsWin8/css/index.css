@@ -1,8 +1,8 @@
-﻿@font-face { font-family: 'Agency'; src: url('AGENCYB.TTF'); } 
+﻿@font-face { font-family: yooo; src: url('AGENCYR.TTF'); } 
 
     body {
         background-image: url("../img/preview3.jpg");
-        font-family: 'Agency', Arial, sans-serif;
+        font-family: yooo, Arial, sans-serif;
         overflow: hidden;
         color: black;
     }
@@ -11,6 +11,24 @@
         background-image: url("../img/starfiel.gif");
         position:absolute;
 
+    }
+
+    .go-back {
+        position: relative;
+        width: 50%;
+        margin: auto;
+        left: 5%;
+        float: left;
+        font-size: 3em;
+    }
+
+    .resume {
+        position: relative;
+        width: 45%;
+        margin: auto;
+        float: left;
+        text-align: right;
+        font-size: 3em;
     }
 
     .grid-block {
@@ -138,14 +156,14 @@
     }
 
     #menu {
-        font-family: 'Agency FB', Arial, sans-serif;
+        font-family: yooo, Arial, sans-serif;
         width: 100px;
         background-color: rgba(255,255,255,0.75);
         position: absolute;
     }
 
     #level {
-        font-family: 'Agency FB', Arial, sans-serif;
+        font-family: yooo, Arial, sans-serif;
         width: 100px;
         background-color: rgba(255,255,255,0.75);
         position: absolute;
