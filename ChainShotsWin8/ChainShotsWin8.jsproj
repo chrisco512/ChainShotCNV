@@ -112,6 +112,7 @@
     <Content Include="img\grunge-background1.jpg" />
     <Content Include="img\grunge.jpg" />
     <Content Include="img\grunge2.jpg" />
+    <Content Include="img\help.png" />
     <Content Include="img\jewelSheet.png" />
     <Content Include="img\jewel_A.png.exclude" />
     <Content Include="img\jewel_B.png.exclude" />
@@ -132,8 +133,11 @@
     <Content Include="img\lightning-storm-blue-raining.gif" />
     <Content Include="img\logo.png" />
     <Content Include="img\logo_small.png" />
+    <Content Include="img\pacman.png" />
+    <Content Include="img\play.png" />
     <Content Include="img\prev-21.jpg" />
     <Content Include="img\preview1.pdn" />
+    <Content Include="img\preview1.png" />
     <Content Include="img\preview10.jpg" />
     <Content Include="img\preview2.pdn" />
     <Content Include="img\preview3.jpg" />

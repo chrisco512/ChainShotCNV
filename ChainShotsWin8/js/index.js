@@ -281,30 +281,30 @@ function drawScreen() {
     boxDOM2.htmlElement.style.height = canvas.height + 'px';
         
     if (mode === modes.MAIN) {
-        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(levelDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM).to({ alpha: .75, x: boxDOM.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: boxDOM2.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(menuDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - menuDOM.htmlElement.clientWidth / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(menuDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 25, rotation: 0 }, 500, createjs.Ease.cubicOut);
     }
 
     if (mode === modes.LEVEL) {
-        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM).to({ alpha: .75, x: boxDOM.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: boxDOM2.htmlElement.parentElement.clientWidth + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(menuDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(levelDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - levelDOM.htmlElement.clientWidth / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(menuDOM).to({ alpha: 1, x: -$(menuDOM.htmlElement).width() - 300, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(levelDOM.htmlElement).width() / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 25, rotation: 0 }, 500, createjs.Ease.cubicOut);
     }
 
     if (mode === modes.GAME) {
-        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM).to({ alpha: .75, x: boxDOM.htmlElement.parentElement.clientWidth / 2 - canvas.width / 2 - boxDOM.htmlElement.clientWidth, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: boxDOM2.htmlElement.parentElement.clientWidth / 2 + canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(menuDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(levelDOM).to({ alpha: 1, x: -menuDOM.htmlElement.clientWidth - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() / 2 - canvas.width / 2 - $(boxDOM.htmlElement).width(), y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() / 2 + canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(menuDOM).to({ alpha: 1, x: -$(menuDOM.htmlElement).width() - 300, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: -$(menuDOM.htmlElement).width() - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 25, rotation: 0 }, 500, createjs.Ease.cubicOut);
     }
     //end game mode draw
 }
@@ -334,10 +334,10 @@ function updateMenus() {
     $difficulty.innerText = difficulty;
 }
 
-window.onresize = function (event) {
+window.onresize = function() {
     drawScreen();
     drawGame();
-}
+};
 //start screen
 //levels menu
 //top scores for each level
@@ -392,7 +392,7 @@ function init() {
     images.src = "img/jewelSheet.png";
 }
 
-function handleImageLoad(e) {
+function handleImageLoad() {
     startGame();
 }
 
@@ -438,6 +438,4 @@ function checkCollision(bmp) {
 window.onload = function () {
     init();
     $(".star").rating('select', 4);
-
-    menuBlocks = $('.grid-block');
 };

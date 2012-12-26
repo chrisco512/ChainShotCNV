@@ -1,12 +1,8 @@
-﻿@font-face {
-    font-family: 'Agency FB';
-    src: url('AGENCYB.ttf');
-}
-
-body {
+﻿body {
     background-image: url("../img/preview3.jpg");
     font-family: 'Agency FB', Arial, sans-serif;
     overflow: hidden;
+    color: black;
 }
 
 canvas {
@@ -20,9 +16,11 @@ canvas {
     margin-top: 4%;
     width: 44%;
     height: 44%;
-    background-color: blue;
     position: relative;
     float: left;
+    font-size: 4em;
+    font-weight: bold;
+    color: white;
 }
 
     .grid-block:active {
@@ -32,12 +30,31 @@ canvas {
         margin-top: 6%;
     }
 
-    .start-block {
-        background-color: yellow;
+    .grid-block > p {
+        text-align: center;
+        font-weight: bolder;
     }
 
-    .start-block:active {
+    .grid-block > p > img {
+        height: 40%;
+        width: 40%;
+        position: relative;
+    }
+
+    .green-block {
+        background-color: green;
+    }
+
+    .green-block:active {
         background-color: red;
+    }
+
+    .orange-block {
+        background-color: orange;
+    }
+
+    .orange-block:active {
+        background-color: blue;
     }
 
 .block {

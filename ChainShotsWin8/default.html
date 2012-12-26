@@ -25,10 +25,21 @@
 <body>
     <div id="master">
         <div id="menu">
-            <div class="grid-block"><img src="img/logo.png" height="100%" width="100%" /></div>
-            <div class="grid-block start-block" onclick="transition('LEVEL')">START</div>
-            <div class="grid-block" style="background-color: yellow">HELP</div>
-            <div class="grid-block" style="background-color: skyblue">ABOUT</div>
+            <div class="grid-block"><img src="img/logo.png" height="100%" width="100%" />
+            </div>
+            <div class="grid-block green-block" onclick="transition('LEVEL')">
+                <p><img src="img/play.png" /></p><p>START</p>
+            </div>
+            <div class="grid-block green-block">
+                <p><img src="img/help.png" /></p><p>HELP</p>
+            </div>
+            <div class="grid-block orange-block">
+                <p><img src="img/pacman.png" /></p><p>ABOUT</p>
+            </div>
+        </div>
+        <div>
+            Question designed by Henry Ryder from The Noun Project
+            Pac Man designed by Paulo Volkova from The Noun Project
         </div>
         <div id="level">
             <p onclick="transition('MAIN')">GO BACK</p>
