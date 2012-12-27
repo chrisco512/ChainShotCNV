@@ -15,16 +15,40 @@
 
     .go-back {
         position: relative;
-        width: 50%;
+        width: 32.5%;
         margin: auto;
         left: 5%;
         float: left;
         font-size: 3em;
     }
 
+    .switch {
+        position: relative;
+        width: 30%;
+        float: left;
+        font-size: 3em;
+        left: 5%;
+        line-height: 100px;
+    }
+
+    .win-toggleswitch {
+        font-size: 1.3em;
+        color: black;
+    }
+
+    .win-toggleswitch .win-title {
+        color: black;
+        font-size: 1.2em;
+    }
+
+    .win-toggleswitch .win-label {
+        color: black;
+        font-size: 1em;
+    }
+
     .resume {
         position: relative;
-        width: 45%;
+        width: 32.5%;
         margin: auto;
         float: left;
         text-align: right;
@@ -156,6 +180,20 @@
     }
 
     #menu {
+        font-family: yooo, Arial, sans-serif;
+        width: 100px;
+        background-color: rgba(255,255,255,0.75);
+        position: absolute;
+    }
+
+    #help {
+        font-family: yooo, Arial, sans-serif;
+        width: 100px;
+        background-color: rgba(255,255,255,0.75);
+        position: absolute;
+    }
+
+    #about {
         font-family: yooo, Arial, sans-serif;
         width: 100px;
         background-color: rgba(255,255,255,0.75);

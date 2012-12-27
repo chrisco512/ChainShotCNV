@@ -15,11 +15,11 @@
         }
     }
 
-    if (mode === modes.GAME && gameComplete) {
-        createjs.Tween.get(doneDOM).to({ alpha: 1, visible: true, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
-    } else {
-        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: canvas.parentElement.clientWidth / 2 - canvas.width / 2, y: 0, rotation: 0 }, 500, createjs.Ease.cubicOut);
-    }
+    //if (mode === modes.GAME && gameComplete) {
+   //     createjs.Tween.get(doneDOM).to({ alpha: 1, visible: true, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: canvas.height / 2 - $(doneDOM.htmlElement).height() / 2, rotation: 0 }, 750, createjs.Ease.cubicOut);
+    //} else {
+    //    createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: canvas.height / 2 - $(doneDOM.htmlElement).height() / 2, rotation: 0 }, 25, createjs.Ease.cubicOut);
+   // }
 
     stage.update();
 }
@@ -284,7 +284,7 @@ function remove(target, noRemove) {
 
     removeList.sort(sortRemoveList);
 
-    if (!noRemove && removeList.length > 1) {
+    if (!noRemove && removeList.length >= (difficulty === difficulties.EASY ? 2 : 3)) {
         prevScore = score;
 
         //store current board in board2
@@ -329,11 +329,25 @@ function remove(target, noRemove) {
 
     save();
 
-    if (noRemove && removeList.length > 1) {
+    if (noRemove && removeList.length >= (difficulty === difficulties.EASY ? 2 : 3)) {
         return false;
     }
 
     return true;
+}
+
+//animate the ending
+function animateEnding() {
+    var levelIndex = level - 1;
+    var $stars = $('#stars').children('img');
+    var $star = $('#stars');
+
+    if ($stars.length < curRating) {
+        $star.append('<img src="' + starOn + '" />');
+        audio4.src = "snd/button-37.mp3";
+        audio4.play();
+        setTimeout(animateEnding, 400);
+    }
 }
 
 //check to see if game is complete
@@ -350,6 +364,18 @@ function checkDone() {
     }
     gameComplete = true;
     calculateStats();
+    
+    audio3.pause();
+    $('#gameOverText').text("LEVEL CLEARED!");
+    $('#gameOverMessage').text(curRating);
+    if (curRating < 5)
+        $('#tryHarder').text("Try to get all 5 stars by clearing the whole board!");
+    else
+        $('#tryHarder').text("You cleared the whole board!");
+
+    
+    createjs.Tween.get(doneDOM).to({ alpha: 1, visible: true, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: canvas.height / 2 - $(doneDOM.htmlElement).height() / 2, rotation: 0 }, 500, createjs.Ease.cubicOut);
+    setTimeout(animateEnding, 1250);
 }
 
 // pull blocks toward proper position

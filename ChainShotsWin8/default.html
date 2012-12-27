@@ -5,7 +5,7 @@
     <title>ChainShotsWin8</title>
 
     <!-- WinJS references -->
-    <link href="//Microsoft.WinJS.1.0/css/ui-dark.css" rel="stylesheet" />
+    <link href="//Microsoft.WinJS.1.0/css/ui-light.css" rel="stylesheet" />
     <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
     <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
 
@@ -13,9 +13,7 @@
     <link href="/css/default.css" rel="stylesheet" />
     <script src="/js/default.js"></script>
     <link href="css/index.css" rel="stylesheet" />
-    <link href="lib/rating/jquery.rating.css" rel="stylesheet" />
     <script src="lib/jquery/jquery-1.8.3.min.js"></script>
-    <script src="lib/rating/jquery.rating.pack.js"></script>
     <script src="lib/easeljs/easeljs-0.5.0.min.js"></script>
     <script src="lib/tweenjs/tweenjs-0.3.0.min.js"></script>
     <script src="js/index.js"></script>
@@ -30,22 +28,57 @@
             <div class="grid-block green-block" onclick="transition('LEVEL')">
                 <p><img src="img/play.png" /></p><p>START</p>
             </div>
-            <div class="grid-block green-block">
+            <div class="grid-block green-block" onclick="help(1)">
                 <p><img src="img/help.png" /></p><p>HELP</p>
             </div>
-            <div class="grid-block orange-block">
+            <div class="grid-block orange-block" onclick="about(1)">
                 <p><img src="img/pacman.png" /></p><p>ABOUT</p>
             </div>
         </div>
-        <div>
-            Question designed by Henry Ryder from The Noun Project
-            Pac Man designed by Paulo Volkova from The Noun Project
-            Undo designed by P.J. Onori from The Noun Project
+        <div id="about" onclick="about()" style="font-size: 2em;">
+            <div style="text-align: left; margin-left: 25px; margin-right: 25px;">
+                <h1 style="margin-top: 25px; color: cornflowerblue; position: relative;">ABOUT BLOCKSHOTS</h1>
+                <p style="margin-top: 25px; position: relative;">
+                    BlockShots is based off of the classic puzzle game, Chain Shot!  Chain Shot! was originally published in 1985 for the PC and was later 
+                    ported to Unix and Windows under the name, SameGame in 1993.  A number of iterations have since been released under many different names and many
+                    different platforms.  
+                </p>
+                <p style="margin-top: 25px; position: relative;">
+                    The version you are playing was designed and coded by Chris Cordle of ShrikeSoft.  The game was done entirely in JS & HTML5.  
+                </p>
+                <p style="position: relative; font-size: 1em; font-style: italic;">
+                    Question designed by Henry Ryder from The Noun Project <br /> 
+                    Pac Man designed by Paulo Volkova from The Noun Project <br />
+                    Undo designed by P.J. Onori from The Noun Project
+                </p>
+            </div>
+        </div>
+        <div id="help" onclick="help()" style="font-size: 2em;">
+            <div style="text-align: left; margin-left: 25px; margin-right: 25px;">
+                <h1 style="margin-top: 25px; color: cornflowerblue; position: relative;">HELP</h1>
+                <p style="margin-top: 25px; position: relative;">
+                    RULES
+                </p>
+                <p style="margin-top: 25px; position: relative;">
+                    Easy Mode: Clear same-colored blocks in groups of at least 2.  
+                </p>
+                <p style="margin-top: 25px; position: relative;">
+                    Hard Mode: Clear same-colored blocks in groups of at least 3.  
+                </p>
+                <p style="margin-top: 25px; position: relative;">
+                    Clear blocks by pressing on a group!  Use the Undo button to fix a mistake!  
+                </p>
+                <p style="margin-top: 25px; position: relative;">
+                    Each level is structured so that it is possible to clear all of the blocks on both settings.  Try to get 5 stars in all 11 levels on Easy & Hard!
+                </p>
+            </div>
         </div>
         <div id="level">
             <div style="position: relative; height: 75px; margin-bottom: 25px;">
                 <div class="go-back" onclick="transition('MAIN')">
                     <img src="img/leftarrow.png" style="vertical-align: middle; height: 75px;" /><span>GO BACK</span>
+                </div>
+                <div class="switch" data-win-control="WinJS.UI.ToggleSwitch" data-win-options="{ checked: diffChecked, onchange: setDifficulty, title: 'DIFFICULTY', labelOff: 'EASY', labelOn: 'HARD' }">
                 </div>
                 <div class="resume" onclick="resume()">
                     <span>RESUME</span><img src="img/rightarrow.png" style="vertical-align: middle; height: 75px;" />
@@ -377,7 +410,7 @@
                                 <span>UNDO</span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr onclick="help(1)">
                             <td>
                                 <span><img src="img/help_small.png" /></span>
                                 <span>HELP</span>
@@ -386,16 +419,16 @@
                         <tr onclick="quit()">
                             <td>
                                 <span><img src="img/leftarrow_small.png"/></span>
-                                <span>QUIT</span>
+                                <span>BACK</span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr onclick="playPause()">
                             <td>
-                                <span><img src="img/play_small.png"/></span>
-                                <span>PLAY</span>
+                                <span id="playpause"><img src="img/pause_small.png"/></span>
+                                <span>PAUSE</span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr onclick="nextSong()">
                             <td>
                                 <span><img src="img/next_small.png" /></span>
                                 <span>NEXT</span>
@@ -442,8 +475,10 @@
                 Get you some canvas.
             </canvas>
         </div>
-        <div id="done">
-            <p>GAME OVER YOU WIN!</p>
+        <div id="done" style="background-color: skyblue; text-align: center;">
+            <div style="height: 50px"><span id="stars"></span></div>
+            <p style="font-size: 1.2em;" id="gameOverText"></p>
+            <p style="font-size: 1em; font-style: italic;">You got <span id="gameOverMessage"></span> stars!  <span id="tryHarder"></span></p>
         </div>
      </div>
 </body>

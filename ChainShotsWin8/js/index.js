@@ -17,13 +17,40 @@ var prevScore = 0;
 var board;
 var board2;
 var modes = { MAIN: "MAIN", LEVEL: "LEVEL", GAME: "GAME" };
+var submodes = { NONE: "NONE", ABOUT: "ABOUT", HELP: "HELP" };
 var mode = modes.MAIN;
-var canvasDOM, menuDOM, levelDOM, doneDOM;
+var submode = submodes.NONE;
+var canvasDOM, menuDOM, levelDOM, doneDOM, helpDOM, aboutDOM;
 var gameComplete;
 var starOn = "img/star-on.png";
 var starOff = "img/star-off.png";
+var curRating = 0;
 
 function populateStats() {
+    var $toggle = $('.switch')[0];
+
+    var toggleSwitch = new WinJS.UI.ToggleSwitch($toggle);
+
+    if (difficulty === difficulties.EASY)
+        toggleSwitch.checked = false;
+    else if (difficulty === difficulties.HARD)
+        toggleSwitch.checked = true;
+
+    if (difficulty === difficulties.HARD)
+        $('body').css('background-image', 'url("../img/hardbg.jpg")');
+    else
+        $('body').css('background-image', 'url("../img/preview3.jpg")');
+
+    var $statBlocks = $('.stats');
+    for (var i = 0; i < $statBlocks.length; i++) {
+        if (i % 2 === 0) {
+            difficulty === difficulties.EASY ? $($statBlocks[i]).css('background-color', 'skyblue') : $($statBlocks[i]).css('background-color', 'orange');
+        } else {
+            difficulty === difficulties.EASY ? $($statBlocks[i]).css('background-color', 'green') : $($statBlocks[i]).css('background-color', 'yellow');
+        }
+    }
+
+
     var stats = localStorage["stats"];
     if (!stats) {
         stats = {
@@ -90,7 +117,7 @@ function calculateStats() {
 
     var ratio = numBlks / (size * size);
     var prevRating = stats[difficulty].RATING[levelIndex];
-    var curRating;
+    curRating;
     
     if (ratio === 0)
         curRating = 5;
@@ -188,16 +215,35 @@ function resume() {
         size = parseInt(localStorage["size"]);
         board = JSON.parse(localStorage["board"]);
         board2 = JSON.parse(localStorage["board2"]);
+        populateStats();
         transition(modes.GAME);
         initializeBlocks(true);
         drawGame();
         updatePositions();
 
     } else {
-        alert("No previously saved game in storage.");
+        console.log("No previously saved game in storage.");
     }
 
     //set up board
+}
+
+function about(toAbout) {
+    audio5.play();
+    if (toAbout)
+        submode = submodes.ABOUT;
+    else
+        submode = submodes.NONE;
+    drawScreen();
+}
+
+function help(toHelp) {
+    audio5.play();
+    if (toHelp)
+        submode = submodes.HELP;
+    else
+        submode = submodes.NONE;
+    drawScreen();
 }
 
 
@@ -238,6 +284,9 @@ function drawScreen() {
         stage.addChild(boxDOM);
         stage.addChild(boxDOM2);
 
+        boxDOM.x = 3000;
+        boxDOM2.x = 3000;
+
     }
 
     if (!canvasDOM) {
@@ -253,12 +302,25 @@ function drawScreen() {
         $done.style.height = "100px";
         $done.style.width = "100px";
 
+        var $about = $('#about')[0];
+        $about.style.height = $menu.style.height;
+        $about.style.width = $menu.style.width;
+
+        var $help = $('#help')[0];
+        $about.style.height = $menu.style.height;
+        $about.style.width = $menu.style.width;
+
+        aboutDOM = new createjs.DOMElement($about);
+        stage.addChild(aboutDOM);
+
         doneDOM = new createjs.DOMElement($done);
         stage.addChild(doneDOM);
 
-
         levelDOM = new createjs.DOMElement($level);
         stage.addChild(levelDOM);
+
+        helpDOM = new createjs.DOMElement($help);
+        stage.addChild(helpDOM);
 
         menuDOM = new createjs.DOMElement($menu);
         stage.addChild(menuDOM);
@@ -266,13 +328,24 @@ function drawScreen() {
         canvasDOM = new createjs.DOMElement(canvas);
         stage.addChild(canvasDOM);
 
+        levelDOM.x = 3000;
+        aboutDOM.y = -3000;
+        helpDOM.y = 6000;
+        canvasDOM.x = 3000;
+
     }
 
     menuDOM.htmlElement.style.height = window.innerHeight - 50 + 'px';
     menuDOM.htmlElement.style.width = menuDOM.htmlElement.style.height;
 
-    doneDOM.htmlElement.style.height = "100px";
-    doneDOM.htmlElement.style.width = "100px";
+    aboutDOM.htmlElement.style.height = menuDOM.htmlElement.style.height;
+    aboutDOM.htmlElement.style.width = menuDOM.htmlElement.style.width;
+
+    helpDOM.htmlElement.style.height = menuDOM.htmlElement.style.height;
+    helpDOM.htmlElement.style.width = menuDOM.htmlElement.style.width;
+
+    doneDOM.htmlElement.style.height = "150px";
+    doneDOM.htmlElement.style.width = canvas.width + 'px';
 
     levelDOM.htmlElement.style.height = menuDOM.htmlElement.style.height;
     levelDOM.htmlElement.style.width = menuDOM.htmlElement.style.width;
@@ -280,31 +353,47 @@ function drawScreen() {
     boxDOM.htmlElement.style.height = canvas.height + 'px';
     boxDOM2.htmlElement.style.height = canvas.height + 'px';
         
-    if (mode === modes.MAIN) {
-        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(levelDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+    if (mode === modes.MAIN && submode === submodes.ABOUT) {
+        createjs.Tween.get(menuDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: $(canvas.parentElement).width() + 200, rotation: 0 }, 1000, createjs.Ease.cubicOut);
+        createjs.Tween.get(aboutDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: 25, rotation: 0 }, 1000, createjs.Ease.cubicOut);
+    } else if (mode === modes.MAIN && submode === submodes.HELP) {
+        createjs.Tween.get(menuDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: -200 - $(canvas.parentElement).width(), rotation: 0 }, 1000, createjs.Ease.cubicOut);
+        createjs.Tween.get(helpDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: 25, rotation: 0 }, 1000, createjs.Ease.cubicOut);
+    }
+    else if (mode === modes.MAIN) {
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 25, rotation: 0 }, 50, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() + 100, y: 25, rotation: 0 }, 50, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() + 100, y: 25, rotation: 0 }, 50, createjs.Ease.cubicOut);
         createjs.Tween.get(menuDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 25, rotation: 0 }, 500, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 0, rotation: 0 }, 50, createjs.Ease.cubicOut);
+        createjs.Tween.get(aboutDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: -200 - $(canvas.parentElement).width(), rotation: 0 }, 1000, createjs.Ease.cubicOut);
+        createjs.Tween.get(helpDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: $(canvas.parentElement).width() + 200, rotation: 0 }, 1000, createjs.Ease.cubicOut);
     }
 
     if (mode === modes.LEVEL) {
-        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() + 100, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() + 100, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() + 100, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() + 100, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 0, rotation: 0 }, 50, createjs.Ease.cubicOut);
         createjs.Tween.get(menuDOM).to({ alpha: 1, x: -$(menuDOM.htmlElement).width() - 300, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(levelDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(levelDOM.htmlElement).width() / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 25, rotation: 0 }, 500, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(levelDOM.htmlElement).width() / 2, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
     }
 
-    if (mode === modes.GAME) {
-        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() / 2 - canvas.width / 2 - $(boxDOM.htmlElement).width(), y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() / 2 + canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+    if (mode === modes.GAME && submode === submodes.HELP) {
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: -200 - $(canvas.parentElement).width(), rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .75, x: $(boxDOM.htmlElement.parentElement).width() / 2 - canvas.width / 2 - $(boxDOM.htmlElement).width(), y: -200 - $(canvas.parentElement).width(), rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .75, x: $(boxDOM2.htmlElement.parentElement).width() / 2 + canvas.width / 2, y: -200 - $(canvas.parentElement).width(), rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(helpDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+    } else if (mode === modes.GAME) {
+        createjs.Tween.get(canvasDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM).to({ alpha: .90, x: $(boxDOM.htmlElement.parentElement).width() / 2 - canvas.width / 2 - $(boxDOM.htmlElement).width(), y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(boxDOM2).to({ alpha: .90, x: $(boxDOM2.htmlElement.parentElement).width() / 2 + canvas.width / 2, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
         createjs.Tween.get(menuDOM).to({ alpha: 1, x: -$(menuDOM.htmlElement).width() - 300, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(levelDOM).to({ alpha: 1, x: -$(menuDOM.htmlElement).width() - 300, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
-        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 25, rotation: 0 }, 500, createjs.Ease.cubicOut);
+        createjs.Tween.get(levelDOM).to({ alpha: 1, x: -$(menuDOM.htmlElement).width() - 300, y: 25, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(doneDOM).to({ alpha: 0, visible: false, x: $(canvas.parentElement).width() / 2 - canvas.width / 2, y: 0, rotation: 0 }, 2000, createjs.Ease.cubicOut);
+        createjs.Tween.get(helpDOM).to({ alpha: 1, x: $(canvas.parentElement).width() / 2 - $(menuDOM.htmlElement).width() / 2, y: $(canvas.parentElement).width() + 200, rotation: 0 }, 2000, createjs.Ease.cubicOut);
     }
     //end game mode draw
 }
@@ -313,6 +402,14 @@ function transition(nextMode) {
     mode = nextMode;
     if (mode === modes.LEVEL) {
         populateStats();
+        audio3.pause();
+        audio5.play();
+        $('#stars').html('');
+    }
+    if (mode === modes.GAME) {
+        audio5.play();
+        audio3.src = audioSources[audioIndex];
+        audio3.play();
     }
     drawScreen();
 }
@@ -349,22 +446,27 @@ window.onresize = function() {
 var audio = new Audio();
 var audio2 = new Audio();
 var audio3 = new Audio();
+var audio4 = new Audio();
+var audio5 = new Audio();
 
 var audioSources = ["snd/destination.mp3", "snd/iron-man.mp3", "snd/midnight-ride.mp3", "snd/heart-of-the-sea.mp3"];
 var audioIndex = Math.floor((Math.random() * audioSources.length));;
 
 audio.src = "snd/button-1.mp3";
 audio2.src = "snd/button-4.mp3";
+audio4.src = "snd/button-37.mp3";
+audio5.src = "snd/button-43.mp3";
+
 audio.volume = 0.5;
 audio2.volume = 0.5;
-audio3.autoplay = true;
-//0audio3.src = audioSources[audioIndex];
+audio4.volume = 1;
 
 function nextSong() {
     audioIndex++;
     if (audioIndex > audioSources.length - 1)
         audioIndex = 0;
     audio3.src = audioSources[audioIndex];
+    playPause();
 }
 
 audio3.addEventListener('ended', function () {
@@ -372,10 +474,17 @@ audio3.addEventListener('ended', function () {
 });
 
 function playPause() {
-    if (audio3.paused)
+    if (audio3.paused) {
         audio3.play();
-    else
+        $('#playpause').children('img').attr('src', 'img/pause_small.png');
+        $('#playpause').next().text("PAUSE");
+    }
+    else {
         audio3.pause();
+        $('#playpause').children('img').attr('src', 'img/play_small.png');
+        $('#playpause').next().text("PLAY");
+    }
+        
 }
 
 function init() {
@@ -433,9 +542,19 @@ function checkCollision(bmp) {
     }
 }
 
+function setDifficulty() {
+    if (difficulty === difficulties.EASY)
+        difficulty = difficulties.HARD;
+    else
+        difficulty = difficulties.EASY;
 
+    populateStats();
+
+}
+
+WinJS.Utilities.markSupportedForProcessing(setDifficulty);
+WinJS.Utilities.requireSupportedForProcessing(setDifficulty);
 
 window.onload = function () {
     init();
-    $(".star").rating('select', 4);
 };
