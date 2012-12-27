@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="3006356a-368c-47b8-bce1-66b48654f862" Version="1.0.0.0" Publisher="CN=Chris" />
+  <Identity Name="62661ShrikeSoft.BlockShots" Version="1.0.0.2" Publisher="CN=CEA9CA9D-5842-4CD9-BBD9-A1316B79652C" />
   <Properties>
     <DisplayName>BlockShots</DisplayName>
-    <PublisherDisplayName>Chris</PublisherDisplayName>
+    <PublisherDisplayName>ShrikeSoft</PublisherDisplayName>
     <Logo>images\storelogo.png</Logo>
   </Properties>
   <Prerequisites>

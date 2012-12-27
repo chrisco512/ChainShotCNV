@@ -47,7 +47,9 @@
     <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
     <TargetPlatformVersion>8.0</TargetPlatformVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <PackageCertificateKeyFile>ChainShotsWin8_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>ChainShotsWin8_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <PackageCertificateThumbprint>2A97FC4A21EB3D450DC4F0B659F1F94ACA107630</PackageCertificateThumbprint>
   </PropertyGroup>
   <ItemGroup>
     <AppxManifest Include="package.appxmanifest">
@@ -55,6 +57,7 @@
     </AppxManifest>
     <Content Include="boards.txt" />
     <Content Include="ChainShotsWin8.sln" />
+    <None Include="ChainShotsWin8_StoreKey.pfx" />
     <Content Include="css\AGENCYB.TTF" />
     <Content Include="css\AGENCYR.TTF" />
     <Content Include="css\default.css" />
@@ -122,16 +125,15 @@
     <Content Include="img\star-on.png" />
     <Content Include="img\starfiel.gif" />
     <Content Include="img\undo.png" />
-    <Content Include="index.html" />
     <Content Include="js\boards.js" />
     <Content Include="js\default.js" />
     <Content Include="js\game.js" />
     <Content Include="js\index.js" />
-    <Content Include="js\menu.js" />
     <Content Include="lib\easeljs\easeljs-0.5.0.min.js" />
     <Content Include="lib\jquery\jquery-1.8.3.min.js" />
     <Content Include="lib\jquery\jRating.jquery.js.exclude" />
     <Content Include="lib\tweenjs\tweenjs-0.3.0.min.js" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="save.txt" />
     <Content Include="snd\button-1.mp3" />
     <Content Include="snd\button-37.mp3" />
