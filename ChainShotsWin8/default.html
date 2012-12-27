@@ -40,6 +40,7 @@
         <div>
             Question designed by Henry Ryder from The Noun Project
             Pac Man designed by Paulo Volkova from The Noun Project
+            Undo designed by P.J. Onori from The Noun Project
         </div>
         <div id="level">
             <div style="position: relative; height: 75px; margin-bottom: 25px;">
@@ -361,26 +362,81 @@
         </div>
         <div id="container">
             <div id="box" class="block">
-                <span><img src="img/logo_small.png" width="100%" /></span>
-                <p onclick="undo()">UNDO</p>
-                <p>HELP</p>
-                <p onclick="quit()">QUIT</p>
-                <p>AUDIO</p>
-                <p onclick="playPause()">PLAY/PAUSE</p>
-                <p onclick="nextSong()">NEXT</p>
-                <p>VOLUME</p>
+                <table style="font-size: 1.2em; font-weight: bold; border-spacing:0; width: 100%; height: 100%; padding: 0; left: 0; top: 0; margin: 0; border: 0;">
+                    <thead style="height: 100px; width: 100%; border-spacing:0; padding: 0; margin: 0;">
+                        <tr style="border-spacing:0; padding: 0; margin: 0;">
+                            <th style="border-spacing:0; padding: 0; margin: 0;">
+                                <span><img src="img/logo_small.png" width="100%" /></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="undo()">
+                            <td>
+                                <span><img src="img/undo.png" width="100%" /></span>
+                                <span>UNDO</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span><img src="img/help_small.png" width="100%" /></span>
+                                <span>HELP</span>
+                            </td>
+                        </tr>
+                        <tr onclick="quit()">
+                            <td>
+                                <span><img src="img/leftarrow_small.png" width="100%" /></span>
+                                <span>QUIT</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span><img src="img/play_small.png" width="100%" /></span>
+                                <span>PLAY</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span><img src="img/next_small.png" width="100%" /></span>
+                                <span>NEXT</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div id="box2" class="block">
-                <p>SCORE</p>
-                <p id="score">00000</p>
-                <p>BLKS REM</p>
-                <p id="numBlks">00000</p>
-                <p>LEVEL</p>
-                <p id="numLevel">00000</p>
-                <p>SIZE</p>
-                <p id="size">00000</p>
-                <p>DIFFICULTY</p>
-                <p id="difficulty">00000</p>
+                <table style="border-spacing:0; top: 0; left: 0; width: 100%; height: 100%; font-size: 1.5em; font-weight: bold;">
+                    <tr>
+                        <td>
+                            <p>SCORE</p>
+                            <p style="color: green" id="score">00000</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>BLKS REM</p>
+                            <p style="color: green"  id="numBlks">00000</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>LEVEL</p>
+                            <p style="color: green"  id="numLevel">00000</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>SIZE</p>
+                            <p style="color: green"  id="size">00000</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>DIFFICULTY</p>
+                            <p style="color: green"  id="difficulty">00000</p>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <canvas id="gameCanvas">
                 Get you some canvas.
